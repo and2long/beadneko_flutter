@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_template/pages/me.dart';
-import 'package:flutter_project_template/pages/page1.dart';
+import 'package:beadneko/pages/me.dart';
+import 'package:beadneko/pages/page1.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

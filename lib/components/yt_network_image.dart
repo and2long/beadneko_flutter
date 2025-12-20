@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project_template/utils/common_util.dart';
+import 'package:beadneko/utils/common_util.dart';
 import 'package:flutter_ytlog/flutter_ytlog.dart';
 
 class YTNetworkImage extends StatelessWidget {

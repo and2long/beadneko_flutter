@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_template/components/yt_tile.dart';
-import 'package:flutter_project_template/i18n/i18n.dart';
-import 'package:flutter_project_template/store.dart';
+import 'package:beadneko/components/yt_tile.dart';
+import 'package:beadneko/i18n/i18n.dart';
+import 'package:beadneko/store.dart';
 import 'package:provider/provider.dart';
 
 class LanguagePage extends StatefulWidget {

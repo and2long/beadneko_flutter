@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_template/i18n/i18n.dart';
-import 'package:flutter_project_template/main.dart';
-import 'package:flutter_project_template/theme.dart';
+import 'package:beadneko/i18n/i18n.dart';
+import 'package:beadneko/main.dart';
+import 'package:beadneko/theme.dart';
 import 'package:flutter_ytlog/flutter_ytlog.dart';
 
 class DialogUtil {

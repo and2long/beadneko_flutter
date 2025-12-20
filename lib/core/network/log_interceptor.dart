@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_project_template/constants.dart';
+import 'package:beadneko/constants.dart';
 import 'package:flutter_ytlog/flutter_ytlog.dart';
 
 class MyLogInterceptor extends Interceptor {

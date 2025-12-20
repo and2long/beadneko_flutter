@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_project_template/core/event_bus.dart';
-import 'package:flutter_project_template/enums.dart';
-import 'package:flutter_project_template/utils/sp_util.dart';
+import 'package:beadneko/core/event_bus.dart';
+import 'package:beadneko/enums.dart';
+import 'package:beadneko/utils/sp_util.dart';
 
 class AuthInterceptor extends Interceptor {
   static bool isRefreshing = false;
