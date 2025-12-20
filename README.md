@@ -12,3 +12,11 @@ BeadNeko 是一款为拼豆爱好者打造的创作工具 App。
 BeadNeko 让拼豆创作变得简单、有趣、可复现。
 非常适合拼豆 DIY、像素爱好者与创作者使用。
 
+
+
+### 品牌颜色资源
+hama
+https://www.hama.dk/media/103354/midi-colour-chart-2023.pdf
+
+perler bead color reference
+https://online.fliphtml5.com/rbjdq/svbs/
