@@ -70,6 +70,7 @@ abstract class S {
   String get termsOfService;
 
   String get me;
+  String get settings;
   String get settingsLanguage;
 
   String get dialogBtnClose;

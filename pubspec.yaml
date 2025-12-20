@@ -20,6 +20,20 @@ dependencies:
   flutter_ytnavigator: ^0.0.7
   flutter_ytlog: ^0.0.4
   flutter_spinkit: ^5.2.2
+  
+  # Image handling
+  image_picker: ^1.2.1
+  image: ^4.7.1
+  image_gallery_saver_plus: ^4.0.1
+  
+  # Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.5
+  
+  # Utils
+  permission_handler: ^12.0.1
+  share_plus: ^12.0.1
 
 dev_dependencies:
   flutter_lints: ^6.0.0

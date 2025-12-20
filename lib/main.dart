@@ -14,9 +14,16 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_ytlog/flutter_ytlog.dart';
 import 'package:provider/provider.dart';
 
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:beadneko/models/bead_project.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SPUtil.init().then((value) {
+  SPUtil.init().then((value) async {
+    await Hive.initFlutter();
+    Hive.registerAdapter(BeadProjectAdapter());
+    await Hive.openBox<BeadProject>('projects');
+    
     XHttp.init();
     runApp(Store.init(const MyApp()));
   });

@@ -19,7 +19,8 @@ import 'package:flutter/material.dart';
 /// ...where "light" is `FontWeight.w300`, "regular" is `FontWeight.w400` and
 /// "medium" is `FontWeight.w500`.
 
-const themeColor = Colors.blue;
+const themeColor = Colors.pink;
+const secondaryColor = Colors.tealAccent;
 const dividerColor = Color(0xFFE8E8E8);
 const backgroundColor = Color(0xfff8f8f8);
 
@@ -29,8 +30,17 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       brightness: Brightness.light,
       seedColor: themeColor,
+      secondary: secondaryColor,
     ),
-    appBarTheme: const AppBarTheme(centerTitle: true, elevation: 1),
+    appBarTheme: const AppBarTheme(
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.pinkAccent,
+      foregroundColor: Colors.white,
+    ),
+    scaffoldBackgroundColor: const Color(
+      0xFFFFF0F5,
+    ), // Lavender Blush (Light Pink)
     dividerTheme: DividerThemeData(color: Colors.grey[200], thickness: 1),
   );
 
@@ -38,8 +48,13 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       brightness: Brightness.dark,
       seedColor: themeColor,
+      secondary: secondaryColor,
     ),
-    appBarTheme: const AppBarTheme(centerTitle: true, elevation: 1),
+    appBarTheme: const AppBarTheme(
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.pink, // Darker pink
+    ),
     dividerTheme: DividerThemeData(color: Colors.grey[900], thickness: 1),
   );
 }

@@ -20,6 +20,9 @@ class ProjectLocalizationsEN implements S {
   String get me => "Profile";
 
   @override
+  String get settings => "Settings";
+
+  @override
   String get settingsLanguage => "Language";
 
   @override

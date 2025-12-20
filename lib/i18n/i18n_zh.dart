@@ -20,6 +20,9 @@ class ProjectLocalizationsZH implements S {
   String get me => "我的";
 
   @override
+  String get settings => "设置";
+
+  @override
   String get settingsLanguage => "语言";
 
   @override

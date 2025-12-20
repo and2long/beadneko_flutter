@@ -20,6 +20,9 @@ class ProjectLocalizationsJA implements S {
   String get me => "アカウント";
 
   @override
+  String get settings => "設定";
+
+  @override
   String get settingsLanguage => "言語";
 
   @override

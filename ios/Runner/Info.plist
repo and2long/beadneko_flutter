@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>BeadNeko needs access to your photo library to select images for pixelation.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>BeadNeko needs access to save your pixel art to your photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>BeadNeko needs access to your camera to take photos for pixelation.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
