@@ -8,22 +8,31 @@ class ProjectLocalizationsJA implements S {
   String get ok => "確定";
 
   @override
-  String get privacyPolicy => "プライバシーポリシー";
-
-  @override
-  String get readAndAgree => "に同意する";
-
-  @override
-  String get termsOfService => "利用規約";
-
-  @override
   String get me => "アカウント";
 
   @override
-  String get settings => "設定";
+  String get settingsTitle => "設定";
 
   @override
   String get settingsLanguage => "言語";
+
+  @override
+  String get settingsLanguageSystem => "システムのデフォルト";
+
+  @override
+  String get settingsTheme => "テーマ";
+
+  @override
+  String get settingsThemeLight => "ライト";
+
+  @override
+  String get settingsThemeDark => "ダーク";
+
+  @override
+  String get settingsThemeSystem => "システムのデフォルト";
+
+  @override
+  String get settingsVersion => "バージョン";
 
   @override
   String get dialogBtnClose => '閉じる';

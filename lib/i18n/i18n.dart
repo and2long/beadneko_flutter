@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:beadneko/i18n/i18n_en.dart';
 import 'package:beadneko/i18n/i18n_ja.dart';
 import 'package:beadneko/i18n/i18n_zh.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// 项目本地化资源代理
 class ProjectLocalizationsDelegate extends LocalizationsDelegate<S> {
@@ -65,13 +65,17 @@ abstract class S {
   // 需要翻译的字段追加到下面，在子类中进行赋值。
   String get cancel;
   String get ok;
-  String get readAndAgree;
-  String get privacyPolicy;
-  String get termsOfService;
 
   String get me;
-  String get settings;
+  String get settingsTitle;
   String get settingsLanguage;
+  String get settingsLanguageSystem;
+  String get settingsTheme;
+  String get settingsThemeLight;
+  String get settingsThemeDark;
+  String get settingsThemeSystem;
+
+  String get settingsVersion;
 
   String get dialogBtnClose;
   String get dialogBtnConfirm;

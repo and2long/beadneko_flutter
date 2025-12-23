@@ -5,7 +5,6 @@ import 'package:beadneko/core/palette.dart';
 import 'package:beadneko/core/pixel_processor.dart';
 import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/utils/image_saver.dart';
-import 'package:beadneko/utils/sp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,30 +19,11 @@ class Store {
   static MultiProvider init(Widget child) {
     return MultiProvider(
       providers: [
-        // 国际化
-        ChangeNotifierProvider.value(
-          value: LocaleStore(SPUtil.getLanguageCode()),
-        ),
         // 项目状态
         ChangeNotifierProvider(create: (_) => BeadProjectProvider()),
       ],
       child: child,
     );
-  }
-}
-
-/// 语言
-class LocaleStore with ChangeNotifier {
-  String _languageCode;
-
-  LocaleStore(this._languageCode);
-
-  String get languageCode => _languageCode;
-
-  void setLanguageCode(String languageCode) {
-    _languageCode = languageCode;
-    SPUtil.setLanguageCode(languageCode);
-    notifyListeners();
   }
 }
 

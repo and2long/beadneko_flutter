@@ -2,6 +2,7 @@ import 'package:beadneko/core/network/http.dart';
 import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/pages/home.dart';
+import 'package:beadneko/pages/settings_page.dart';
 import 'package:beadneko/store.dart';
 import 'package:beadneko/theme.dart';
 import 'package:beadneko/utils/sp_util.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_ytlog/flutter_ytlog.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +21,8 @@ void main() {
     Hive.registerAdapter(BeadProjectAdapter());
     await Hive.openBox<BeadProject>('projects');
     XHttp.init();
+    ThemeController.init(SPUtil.getThemeMode());
+    LanguageController.init(SPUtil.getLocale());
     runApp(Store.init(const MyApp()));
   });
   SystemChrome.setSystemUIOverlayStyle(
@@ -45,35 +47,41 @@ class _MyAppState extends State<MyApp> {
         // 程序的字体大小不受系统字体大小影响
         textScaler: TextScaler.noScaling,
       ),
-      child: Consumer<LocaleStore>(
-        builder: (BuildContext context, LocaleStore value, Widget? child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            navigatorKey: MyApp.navigatorKey,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              // 项目本地化资源代理
-              S.delegate,
-            ],
-            // 支持的语言
-            supportedLocales: S.supportedLocales,
-            locale: Locale(value.languageCode),
-            home: const HomePage(),
-            navigatorObservers: [MyRouteObserver()],
-            builder: FlutterSmartDialog.init(
-              builder: (context, child) => GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
-                child: child ?? const SizedBox(),
-              ),
-              loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
-            ),
+      child: ValueListenableBuilder<ThemeMode>(
+        valueListenable: ThemeController.themeNotifier,
+        builder: (context, themeMode, _) {
+          return ValueListenableBuilder<Locale?>(
+            valueListenable: LanguageController.localeNotifier,
+            builder: (context, locale, _) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                navigatorKey: MyApp.navigatorKey,
+                theme: AppTheme.light,
+                darkTheme: AppTheme.dark,
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  // 项目本地化资源代理
+                  S.delegate,
+                ],
+                // 支持的语言
+                supportedLocales: S.supportedLocales,
+                locale: locale,
+                home: const HomePage(),
+                navigatorObservers: [MyRouteObserver()],
+                builder: FlutterSmartDialog.init(
+                  builder: (context, child) => GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    child: child ?? const SizedBox(),
+                  ),
+                  loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+                ),
+              );
+            },
           );
         },
       ),
