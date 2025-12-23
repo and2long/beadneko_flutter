@@ -1,21 +1,18 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:beadneko/core/network/http.dart';
 import 'package:beadneko/i18n/i18n.dart';
+import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/pages/home.dart';
 import 'package:beadneko/store.dart';
 import 'package:beadneko/theme.dart';
 import 'package:beadneko/utils/sp_util.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_ytlog/flutter_ytlog.dart';
-import 'package:provider/provider.dart';
-
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:beadneko/models/bead_project.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,16 +20,12 @@ void main() {
     await Hive.initFlutter();
     Hive.registerAdapter(BeadProjectAdapter());
     await Hive.openBox<BeadProject>('projects');
-    
     XHttp.init();
     runApp(Store.init(const MyApp()));
   });
-  // 安卓透明状态栏
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
-    );
-  }
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  );
 }
 
 class MyApp extends StatefulWidget {

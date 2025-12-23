@@ -20,6 +20,7 @@ dependencies:
   flutter_ytnavigator: ^0.0.7
   flutter_ytlog: ^0.0.4
   flutter_spinkit: ^5.2.2
+  google_fonts: ^6.1.0
   
   # Image handling
   image_picker: ^1.2.1

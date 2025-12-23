@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:beadneko/components/action_card.dart';
+import 'package:beadneko/components/dashed_container.dart';
 import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/pages/editor_page.dart';
 import 'package:beadneko/pages/settings_page.dart';
 import 'package:beadneko/store.dart';
+import 'package:beadneko/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,146 +19,284 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Projects'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: ValueListenableBuilder(
-        valueListenable: Hive.box<BeadProject>('projects').listenable(),
-        builder: (context, Box<BeadProject> box, _) {
-          if (box.values.isEmpty) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.palette_outlined, size: 80, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text(
-                    'No projects yet',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppGradients.background),
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                // Header: Logo, Title, Settings
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryGradientStart.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.pets,
+                        color: AppColors.primaryGradientStart,
+                        size: 28,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Tap + to create a new BeadNeko project',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final keys = box.keys.toList().reversed.toList(); // Newest first
-
-          return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.8,
-            ),
-            itemCount: keys.length,
-            itemBuilder: (context, index) {
-              final key = keys[index];
-              final project = box.get(key)!;
-
-              return Card(
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () {
-                    final store = Provider.of<BeadProjectProvider>(
-                      context,
-                      listen: false,
-                    );
-                    store.loadProject(project);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditorPage(),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'BeadNeko',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textDark,
                       ),
-                    );
-                  },
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Delete Project'),
-                        content: const Text(
-                          'Are you sure you want to delete this project?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel'),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.settings_outlined),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsPage(),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              box.delete(key);
-                              Navigator.pop(context);
-                            },
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.red,
-                            ),
-                            child: const Text('Delete'),
-                          ),
-                        ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                // Caughty Title Section
+                const Text(
+                  'Turn your memories',
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: AppColors.textDark,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 32,
+                      letterSpacing: -0.5,
+                    ),
+                    children: const [
+                      TextSpan(
+                        text: 'into ',
+                        style: TextStyle(color: AppColors.textDark),
                       ),
-                    );
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: Image.file(
-                          File(project.originalImagePath),
-                          fit: BoxFit.cover,
-                          errorBuilder: (ctx, err, stack) =>
-                              const Icon(Icons.broken_image),
-                        ),
+                      TextSpan(
+                        text: 'pixel art',
+                        style: TextStyle(color: AppColors.primaryGradientStart),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${project.targetSize}x${project.targetSize}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            Text(
-                              _formatDate(project.updatedAt),
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
+                      TextSpan(
+                        text: '!',
+                        style: TextStyle(color: AppColors.textDark),
                       ),
                     ],
                   ),
                 ),
-              );
-            },
+                const SizedBox(height: 12),
+                const Text(
+                  'Create beautiful bead patterns instantly',
+                  style: TextStyle(fontSize: 16, color: AppColors.textLight),
+                ),
+                const SizedBox(height: 32),
+                // Action Grid
+                ActionCard(
+                  title: 'Select from Album',
+                  subtitle: 'Upload existing photos',
+                  icon: Icons.image_outlined,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFF5C9B), Color(0xFFFF86AC)],
+                  ),
+                  onTap: () => _checkPermissionAndPickImage(context),
+                ),
+                const SizedBox(height: 16),
+                ActionCard(
+                  title: 'Take Photo',
+                  subtitle: 'Capture a new moment',
+                  icon: Icons.camera_alt_outlined,
+                  iconColor: const Color(0xFF00C9B1),
+                  textColor: AppColors.textDark,
+                  gradient: const LinearGradient(
+                    colors: [Colors.white, Colors.white],
+                  ),
+                  onTap: () {
+                    _pickImage(context, source: ImageSource.camera);
+                  },
+                ),
+                const SizedBox(height: 40),
+                // Recent Projects Section
+                const Text(
+                  'Recent Projects',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textDark,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ValueListenableBuilder(
+                    valueListenable: Hive.box<BeadProject>(
+                      'projects',
+                    ).listenable(),
+                    builder: (context, Box<BeadProject> box, _) {
+                      if (box.isEmpty) {
+                        return _buildEmptyState(context);
+                      }
+                      final projects = box.values.toList().reversed.toList();
+                      return ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        itemCount: projects.length,
+                        itemBuilder: (context, index) {
+                          final project = projects[index];
+                          final key = box.keyAt(box.length - 1 - index);
+                          return _buildProjectItem(context, project, key, box);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Column(
+      children: [
+        DashedContainer(
+          color: Colors.grey[300]!,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+            child: Column(
+              children: [
+                const Text(
+                  '还没有创建任何项目，快来制作你的第一个拼豆作品吧!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+                const SizedBox(height: 24),
+                GestureDetector(
+                  onTap: () => _checkPermissionAndPickImage(context),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: AppGradients.mainAction,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.secondaryGradientStart.withOpacity(
+                            0.3,
+                          ),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add_box, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          '开始新的创作',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProjectItem(
+    BuildContext context,
+    BeadProject project,
+    dynamic key,
+    Box<BeadProject> box,
+  ) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(12),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.file(
+            File(project.originalImagePath),
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+            errorBuilder: (ctx, err, stack) => const Icon(Icons.broken_image),
+          ),
+        ),
+        title: Text('${project.targetSize}x${project.targetSize}'),
+        subtitle: Text(_formatDate(project.updatedAt)),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          final store = Provider.of<BeadProjectProvider>(
+            context,
+            listen: false,
+          );
+          store.loadProject(project);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const EditorPage()),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _checkPermissionAndPickImage(context);
+        onLongPress: () {
+          _showDeleteDialog(context, box, key);
         },
-        child: const Icon(Icons.add_photo_alternate),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(
+    BuildContext context,
+    Box<BeadProject> box,
+    dynamic key,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Project'),
+        content: const Text('Are you sure you want to delete this project?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              box.delete(key);
+              Navigator.pop(context);
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
       ),
     );
   }
@@ -239,10 +380,13 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Future<void> _pickImage(BuildContext context) async {
+  Future<void> _pickImage(
+    BuildContext context, {
+    ImageSource source = ImageSource.gallery,
+  }) async {
     final store = Provider.of<BeadProjectProvider>(context, listen: false);
     store.clearProject();
-    await store.pickImage(ImageSource.gallery);
+    await store.pickImage(source);
     if (store.originalImage != null && context.mounted) {
       Navigator.push(
         context,
