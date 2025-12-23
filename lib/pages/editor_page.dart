@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:beadneko/components/grid_view.dart';
 import 'package:beadneko/core/palette.dart';
+import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/store.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +16,7 @@ class EditorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BeadNeko Editor'),
+        title: Text(S.of(context).editorTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.save_alt),
@@ -36,7 +37,7 @@ class EditorPage extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () => project.pickImage(ImageSource.gallery),
                 icon: const Icon(Icons.add_photo_alternate),
-                label: const Text('Select Image'),
+                label: Text(S.of(context).editorSelectImage),
               ),
             );
           }
@@ -77,7 +78,7 @@ class EditorPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Pixel Size"),
+              Text(S.of(context).editorPixelSize),
               DropdownButton<int>(
                 value: project.targetSize,
                 items: [16, 32, 48, 64, 80, 96, 112, 128].map((int value) {
@@ -98,14 +99,16 @@ class EditorPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Palette Size"),
+              Text(S.of(context).editorPaletteSize),
               DropdownButton<int>(
                 value: project.paletteSize,
                 items: [72, 96, 120, 144, 168, 291].map((int value) {
                   return DropdownMenuItem<int>(
                     value: value,
                     child: Text(
-                      value == 291 ? 'All Colors ($value)' : '$value Colors',
+                      value == 291
+                          ? '${S.of(context).editorPaletteAll} ($value)'
+                          : '$value ${S.of(context).editorPaletteColors}',
                     ),
                   );
                 }).toList(),
@@ -126,7 +129,7 @@ class EditorPage extends StatelessWidget {
                   _showColorStats(context, project.colorStats);
                 },
                 icon: const Icon(Icons.show_chart),
-                label: const Text('Stats'),
+                label: Text(S.of(context).editorStats),
               ),
             ],
           ),
@@ -155,11 +158,11 @@ class EditorPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Color Statistics",
+                    S.of(context).editorStatsTitle,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Text(
-                    "Total: $totalBeads",
+                    "${S.of(context).editorStatsTotal}: $totalBeads",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.grey[600],
                       fontWeight: FontWeight.bold,
@@ -186,7 +189,7 @@ class EditorPage extends StatelessWidget {
                       ),
                       title: Text("${entry.key.code} - ${entry.key.name}"),
                       trailing: Text(
-                        "${entry.value} beads", // Added "beads" unit
+                        "${entry.value} ${S.of(context).editorStatsUnit}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     );
@@ -231,18 +234,16 @@ class EditorPage extends StatelessWidget {
           await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Save Permission Required'),
-              content: const Text(
-                'BeadNeko needs access to save your bead patterns to the photo library.',
-              ),
+              title: Text(S.of(context).permissionSaveTitle),
+              content: Text(S.of(context).permissionSaveContent),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel'),
+                  child: Text(S.of(context).cancel),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Allow'),
+                  child: Text(S.of(context).permissionAllow),
                 ),
               ],
             ),
@@ -267,7 +268,9 @@ class EditorPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            success ? 'Saved to Photos' : 'Failed to save or permission denied',
+            success
+                ? S.of(context).editorSaveSuccess
+                : S.of(context).editorSaveFailure,
           ),
         ),
       );
@@ -278,21 +281,19 @@ class EditorPage extends StatelessWidget {
     return showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Permission Required'),
-        content: const Text(
-          'BeadNeko cannot save photos without permission. Please enable Photo access in the app settings.',
-        ),
+        title: Text(S.of(context).permissionSettingsTitle),
+        content: Text(S.of(context).permissionSaveSettingsContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(S.of(context).cancel),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               openAppSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text(S.of(context).permissionOpenSettings),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:beadneko/components/action_card.dart';
 import 'package:beadneko/components/dashed_container.dart';
+import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/pages/editor_page.dart';
 import 'package:beadneko/pages/settings_page.dart';
@@ -69,9 +70,9 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 // Caughty Title Section
-                const Text(
-                  'Turn your memories',
-                  style: TextStyle(
+                Text(
+                  S.of(context).homeTitle,
+                  style: const TextStyle(
                     fontSize: 32,
                     color: AppColors.textDark,
                     letterSpacing: -0.5,
@@ -83,32 +84,37 @@ class HomePage extends StatelessWidget {
                       fontSize: 32,
                       letterSpacing: -0.5,
                     ),
-                    children: const [
+                    children: [
                       TextSpan(
-                        text: 'into ',
-                        style: TextStyle(color: AppColors.textDark),
+                        text: S.of(context).homeSubtitle1,
+                        style: const TextStyle(color: AppColors.textDark),
                       ),
                       TextSpan(
-                        text: 'pixel art',
-                        style: TextStyle(color: AppColors.primaryGradientStart),
+                        text: S.of(context).homeSubtitle2,
+                        style: const TextStyle(
+                          color: AppColors.primaryGradientStart,
+                        ),
                       ),
                       TextSpan(
-                        text: '!',
-                        style: TextStyle(color: AppColors.textDark),
+                        text: S.of(context).homeSubtitle3,
+                        style: const TextStyle(color: AppColors.textDark),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Create beautiful bead patterns instantly',
-                  style: TextStyle(fontSize: 16, color: AppColors.textLight),
+                Text(
+                  S.of(context).homeDesc,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.textLight,
+                  ),
                 ),
                 const SizedBox(height: 32),
                 // Action Grid
                 ActionCard(
-                  title: 'Select from Album',
-                  subtitle: 'Upload existing photos',
+                  title: S.of(context).homeActionAlbum,
+                  subtitle: S.of(context).homeActionAlbumSub,
                   icon: Icons.image_outlined,
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFF5C9B), Color(0xFFFF86AC)],
@@ -117,8 +123,8 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 ActionCard(
-                  title: 'Take Photo',
-                  subtitle: 'Capture a new moment',
+                  title: S.of(context).homeActionCamera,
+                  subtitle: S.of(context).homeActionCameraSub,
                   icon: Icons.camera_alt_outlined,
                   iconColor: const Color(0xFF00C9B1),
                   textColor: AppColors.textDark,
@@ -131,9 +137,9 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 // Recent Projects Section
-                const Text(
-                  'Recent Projects',
-                  style: TextStyle(
+                Text(
+                  S.of(context).homeRecentProjects,
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textDark,
@@ -180,10 +186,10 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
             child: Column(
               children: [
-                const Text(
-                  '还没有创建任何项目，快来制作你的第一个拼豆作品吧!',
+                Text(
+                  S.of(context).homeEmptyState,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: const TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 const SizedBox(height: 24),
                 GestureDetector(
@@ -206,14 +212,14 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.add_box, color: Colors.white),
-                        SizedBox(width: 8),
+                        const Icon(Icons.add_box, color: Colors.white),
+                        const SizedBox(width: 8),
                         Text(
-                          '开始新的创作',
-                          style: TextStyle(
+                          S.of(context).homeStartNew,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -281,12 +287,12 @@ class HomePage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Project'),
-        content: const Text('Are you sure you want to delete this project?'),
+        title: Text(S.of(context).deleteTitle),
+        content: Text(S.of(context).deleteContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(S.of(context).cancel),
           ),
           TextButton(
             onPressed: () {
@@ -294,7 +300,7 @@ class HomePage extends StatelessWidget {
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(S.of(context).deleteBtn),
           ),
         ],
       ),
@@ -325,18 +331,16 @@ class HomePage extends StatelessWidget {
           await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Photo Access Required'),
-              content: const Text(
-                'BeadNeko needs access to your photos to let you select images for creating bead patterns.',
-              ),
+              title: Text(S.of(context).permissionPhotoTitle),
+              content: Text(S.of(context).permissionPhotoContent),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel'),
+                  child: Text(S.of(context).cancel),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Allow'),
+                  child: Text(S.of(context).permissionAllow),
                 ),
               ],
             ),
@@ -359,21 +363,19 @@ class HomePage extends StatelessWidget {
     return showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Permission Required'),
-        content: const Text(
-          'BeadNeko cannot access your photos. Please enable Photo access in the app settings to continue.',
-        ),
+        title: Text(S.of(context).permissionSettingsTitle),
+        content: Text(S.of(context).permissionPhotoSettingsContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(S.of(context).cancel),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               openAppSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text(S.of(context).permissionOpenSettings),
           ),
         ],
       ),

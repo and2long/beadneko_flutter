@@ -79,4 +79,46 @@ abstract class S {
 
   String get dialogBtnClose;
   String get dialogBtnConfirm;
+
+  // HomePage
+  String get homeTitle;
+  String get homeSubtitle1;
+  String get homeSubtitle2;
+  String get homeSubtitle3;
+  String get homeDesc;
+  String get homeActionAlbum;
+  String get homeActionAlbumSub;
+  String get homeActionCamera;
+  String get homeActionCameraSub;
+  String get homeRecentProjects;
+  String get homeEmptyState;
+  String get homeStartNew;
+
+  // EditorPage
+  String get editorTitle;
+  String get editorSelectImage;
+  String get editorPixelSize;
+  String get editorPaletteSize;
+  String get editorPaletteAll;
+  String get editorPaletteColors;
+  String get editorStats;
+  String get editorStatsTitle;
+  String get editorStatsTotal;
+  String get editorStatsUnit;
+  String get editorSaveSuccess;
+  String get editorSaveFailure;
+
+  // Dialogs & Permissions
+  String get deleteTitle;
+  String get deleteContent;
+  String get deleteBtn;
+  String get permissionPhotoTitle;
+  String get permissionPhotoContent;
+  String get permissionAllow;
+  String get permissionSettingsTitle;
+  String get permissionPhotoSettingsContent;
+  String get permissionSaveSettingsContent;
+  String get permissionOpenSettings;
+  String get permissionSaveTitle;
+  String get permissionSaveContent;
 }
