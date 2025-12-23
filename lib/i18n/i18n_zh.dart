@@ -77,16 +77,19 @@ class ProjectLocalizationsZH implements S {
   String get homeStartNew => '开始新的创作';
 
   @override
+  String get homeViewAll => '查看全部';
+
+  @override
   String get editorTitle => 'BeadNeko 编辑器';
 
   @override
   String get editorSelectImage => '选择图片';
 
   @override
-  String get editorPixelSize => '像素大小';
+  String get editorPixelSize => '网格大小';
 
   @override
-  String get editorPaletteSize => '调色板大小';
+  String get editorPalette => '调色板';
 
   @override
   String get editorPaletteAll => '所有颜色';
@@ -98,7 +101,7 @@ class ProjectLocalizationsZH implements S {
   String get editorStats => '统计';
 
   @override
-  String get editorStatsTitle => '颜色统计';
+  String get editorStatsTitle => '所需颜色';
 
   @override
   String get editorStatsTotal => '总计';

@@ -93,12 +93,13 @@ abstract class S {
   String get homeRecentProjects;
   String get homeEmptyState;
   String get homeStartNew;
+  String get homeViewAll;
 
   // EditorPage
   String get editorTitle;
   String get editorSelectImage;
   String get editorPixelSize;
-  String get editorPaletteSize;
+  String get editorPalette;
   String get editorPaletteAll;
   String get editorPaletteColors;
   String get editorStats;

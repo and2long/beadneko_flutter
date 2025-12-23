@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:beadneko/components/grid_view.dart';
-import 'package:beadneko/core/palette.dart';
 import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/store.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +14,12 @@ class EditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Text(S.of(context).editorTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.save_alt),
+            icon: const Icon(Icons.save_alt, color: Color(0xFFFF4081)),
             onPressed: () async {
               await _checkPermissionAndSave(context);
             },
@@ -41,22 +41,86 @@ class EditorPage extends StatelessWidget {
               ),
             );
           }
-
           return Column(
             children: [
+              // Grid View at the top
               Expanded(
-                child: Center(
+                child: Container(
+                  width: double.infinity,
+                  color: Colors.white,
                   child: InteractiveViewer(
                     minScale: 0.1,
-                    maxScale: 5.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: BeadGridView(grid: project.grid!),
-                    ),
+                    maxScale: 10.0,
+                    boundaryMargin: const EdgeInsets.all(20.0),
+                    child: Center(child: BeadGridView(grid: project.grid!)),
                   ),
                 ),
               ),
-              _buildControls(context, project),
+              // Controls at the bottom
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -5),
+                    ),
+                  ],
+                ),
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 24,
+                        ),
+                        child: Column(
+                          children: [
+                            _buildGridSizeControl(context, project),
+                            const SizedBox(height: 24),
+                            _buildPaletteSizeControl(context, project),
+                          ],
+                        ),
+                      ),
+                      // Action Button at the very bottom
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          bottom: 20,
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            onPressed: () =>
+                                _showColorStatsBottomSheet(context, project),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFFF4081),
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(28),
+                              ),
+                            ),
+                            child: Text(
+                              S.of(context).editorStatsTitle,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           );
         },
@@ -64,140 +128,347 @@ class EditorPage extends StatelessWidget {
     );
   }
 
-  Widget _buildControls(BuildContext context, BeadProjectProvider project) {
+  Widget _buildGridSizeControl(
+    BuildContext context,
+    BeadProjectProvider project,
+  ) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        boxShadow: const [BoxShadow(blurRadius: 10, color: Colors.black12)],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(S.of(context).editorPixelSize),
-              DropdownButton<int>(
-                value: project.targetSize,
-                items: [16, 32, 48, 64, 80, 96, 112, 128].map((int value) {
-                  return DropdownMenuItem<int>(
-                    value: value,
-                    child: Text('${value}x$value'),
-                  );
-                }).toList(),
-                onChanged: (int? newValue) {
-                  if (newValue != null) {
-                    project.updateTargetSize(newValue);
-                  }
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(S.of(context).editorPaletteSize),
-              DropdownButton<int>(
-                value: project.paletteSize,
-                items: [72, 96, 120, 144, 168, 291].map((int value) {
-                  return DropdownMenuItem<int>(
-                    value: value,
-                    child: Text(
-                      value == 291
-                          ? '${S.of(context).editorPaletteAll} ($value)'
-                          : '$value ${S.of(context).editorPaletteColors}',
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF4081).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  );
-                }).toList(),
-                onChanged: (int? newValue) {
-                  if (newValue != null) {
-                    project.setPaletteSize(newValue);
-                  }
-                },
+                    child: const Icon(
+                      Icons.grid_view,
+                      color: Color(0xFFFF4081),
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    S.of(context).editorPixelSize,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A1C1E),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFF4081).withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Text(
+                  "${project.targetSize}",
+                  style: const TextStyle(
+                    color: Color(0xFFFF4081),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  _showColorStats(context, project.colorStats);
-                },
-                icon: const Icon(Icons.show_chart),
-                label: Text(S.of(context).editorStats),
-              ),
-            ],
+          const SizedBox(height: 24),
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: const Color(0xFFFF4081),
+              inactiveTrackColor: const Color(0xFFFF4081).withOpacity(0.1),
+              thumbColor: const Color(0xFFFF4081),
+              overlayColor: const Color(0xFFFF4081).withOpacity(0.1),
+              trackHeight: 4,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 24),
+            ),
+            child: Slider(
+              value: project.targetSize.toDouble(),
+              min: 16,
+              max: 128,
+              divisions: 7, // 16, 32, 48, 64, 80, 96, 112, 128
+              onChanged: (value) {
+                project.updateTargetSize(value.toInt());
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "16x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+                Text(
+                  "48x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+                Text(
+                  "80x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+                Text(
+                  "128x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  void _showColorStats(BuildContext context, Map<BeadColor, int> stats) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        final sortedStats = stats.entries.toList()
-          ..sort(
-            (a, b) => b.value.compareTo(a.value),
-          ); // Sort by count descending
-
-        final totalBeads = stats.values.fold(0, (sum, count) => sum + count);
-
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildPaletteSizeControl(
+    BuildContext context,
+    BeadProjectProvider project,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.of(context).editorStatsTitle,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  Text(
-                    "${S.of(context).editorStatsTotal}: $totalBeads",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFF4081).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.palette,
+                  color: Color(0xFFFF4081),
+                  size: 20,
+                ),
               ),
-              const SizedBox(height: 10),
-              const Divider(),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: sortedStats.length,
-                  itemBuilder: (context, index) {
-                    final entry = sortedStats[index];
-                    return ListTile(
-                      leading: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: entry.key.color,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: Colors.black12),
-                        ),
-                      ),
-                      title: Text("${entry.key.code} - ${entry.key.name}"),
-                      trailing: Text(
-                        "${entry.value} ${S.of(context).editorStatsUnit}",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  },
+              const SizedBox(width: 12),
+              Text(
+                S.of(context).editorPalette,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A1C1E),
                 ),
               ),
             ],
           ),
+          DropdownButton<int>(
+            value: project.paletteSize,
+            underline: const SizedBox(),
+            icon: const Icon(Icons.keyboard_arrow_down),
+            items: [72, 96, 120, 144, 168, 291].map((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text(
+                  value == 291
+                      ? '${S.of(context).editorPaletteAll} ($value)'
+                      : '$value ${S.of(context).editorPaletteColors}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              );
+            }).toList(),
+            onChanged: (int? newValue) {
+              if (newValue != null) {
+                project.setPaletteSize(newValue);
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showColorStatsBottomSheet(
+    BuildContext context,
+    BeadProjectProvider project,
+  ) {
+    final stats = project.colorStats;
+    final sortedStats = stats.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.9,
+          builder: (_, controller) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          S.of(context).editorStatsTitle,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1A1C1E),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF4081).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            "${sortedStats.length} ${S.of(context).editorPaletteColors}",
+                            style: const TextStyle(
+                              color: Color(0xFFFF4081),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.separated(
+                      controller: controller,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
+                      itemCount: sortedStats.length,
+                      separatorBuilder: (context, index) =>
+                          Divider(height: 1, color: Colors.grey[100]),
+                      itemBuilder: (context, index) {
+                        final entry = sortedStats[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 52,
+                                height: 52,
+                                decoration: BoxDecoration(
+                                  color: entry.key.color,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: entry.key.color.withOpacity(0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                  border: Border.all(color: Colors.black12),
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      entry.key.name,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1A1C1E),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      "Code: ${entry.key.code}",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey[500],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  "x${entry.value}",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF42474E),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );

@@ -77,16 +77,19 @@ class ProjectLocalizationsJA implements S {
   String get homeStartNew => '新しく作る';
 
   @override
+  String get homeViewAll => 'すべて表示';
+
+  @override
   String get editorTitle => 'BeadNeko エディタ';
 
   @override
   String get editorSelectImage => '画像を選択';
 
   @override
-  String get editorPixelSize => 'ピクセルサイズ';
+  String get editorPixelSize => 'グリッドサイズ';
 
   @override
-  String get editorPaletteSize => 'パレットサイズ';
+  String get editorPalette => 'カラーパレット';
 
   @override
   String get editorPaletteAll => 'すべての色';
@@ -98,7 +101,7 @@ class ProjectLocalizationsJA implements S {
   String get editorStats => '統計';
 
   @override
-  String get editorStatsTitle => '色の統計';
+  String get editorStatsTitle => '必要な色';
 
   @override
   String get editorStatsTotal => '合計';
