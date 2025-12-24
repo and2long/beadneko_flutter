@@ -1,4 +1,5 @@
 import 'package:beadneko/constants.dart';
+import 'package:beadneko/i18n/i18n.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,18 +36,24 @@ class SPUtil {
     );
   }
 
-  /// Locale 设置（可为 null 表示跟随系统）
-  static Future<bool> setLocale(String? languageCode) {
-    if (languageCode == null) {
-      return _spf.remove(ConstantsKeyCache.keyLanguageCode);
-    }
+  /// Locale 设置
+  static Future<bool> setLocale(String languageCode) {
     return _spf.setString(ConstantsKeyCache.keyLanguageCode, languageCode);
   }
 
-  static Locale? getLocale() {
+  static Locale getLocale() {
     final String? saved = _spf.getString(ConstantsKeyCache.keyLanguageCode);
-    if (saved == null || saved.isEmpty) return null;
-    return Locale(saved);
+    if (saved != null && saved.isNotEmpty) return Locale(saved);
+
+    // 跟随系统，自动匹配支持的语言
+    final Locale systemLocale =
+        WidgetsBinding.instance.platformDispatcher.locale;
+    final String systemCode = systemLocale.languageCode;
+    final bool isSupported = S.supportedLocales.any(
+      (locale) => locale.languageCode == systemCode,
+    );
+
+    return isSupported ? Locale(systemCode) : const Locale('en');
   }
 
   static Future<bool> saveAccessToken(String? token) {

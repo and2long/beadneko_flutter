@@ -420,8 +420,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Future<void> _checkCameraPermissionAndPickImage(
-      BuildContext context) async {
+  Future<void> _checkCameraPermissionAndPickImage(BuildContext context) async {
     // Check current status
     PermissionStatus status = await Permission.camera.status;
 

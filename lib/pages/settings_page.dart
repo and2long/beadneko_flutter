@@ -1,41 +1,8 @@
 import 'package:beadneko/i18n/i18n.dart';
-import 'package:beadneko/utils/sp_util.dart';
+import 'package:beadneko/store.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
-class ThemeController {
-  ThemeController._();
-
-  static late final ValueNotifier<ThemeMode> themeNotifier;
-
-  static void init(ThemeMode initialMode) {
-    themeNotifier = ValueNotifier<ThemeMode>(initialMode);
-  }
-
-  static Future<void> updateThemeMode(ThemeMode mode) async {
-    if (themeNotifier.value == mode) return;
-    themeNotifier.value = mode;
-    await SPUtil.setThemeMode(mode);
-  }
-}
-
-class LanguageController {
-  LanguageController._();
-
-  static late final ValueNotifier<Locale?> localeNotifier;
-
-  static void init(Locale? initialLocale) {
-    localeNotifier = ValueNotifier<Locale?>(initialLocale);
-  }
-
-  static Future<void> updateLocale(Locale? locale) async {
-    if (localeNotifier.value?.toLanguageTag() == locale?.toLanguageTag()) {
-      return;
-    }
-    localeNotifier.value = locale;
-    await SPUtil.setLocale(locale?.languageCode);
-  }
-}
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -45,15 +12,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  late ThemeMode _themeMode;
-  Locale? _locale;
   String _version = '';
 
   @override
   void initState() {
     super.initState();
-    _themeMode = ThemeController.themeNotifier.value;
-    _locale = LanguageController.localeNotifier.value;
     _loadVersion();
   }
 
@@ -86,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     subtitle: Text(
-                      _themeModeLabel(_themeMode),
+                      _themeModeLabel(context.watch<ConfigStore>().themeMode),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -102,7 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     subtitle: Text(
-                      _localeLabel(_locale),
+                      _localeLabel(context.watch<ConfigStore>().locale),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -151,6 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (context) {
         final theme = Theme.of(context);
+        final currentMode = context.read<ConfigStore>().themeMode;
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -168,7 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               RadioGroup<ThemeMode>(
-                groupValue: _themeMode,
+                groupValue: currentMode,
                 onChanged: (mode) {
                   if (mode != null) {
                     Navigator.of(context).pop(mode);
@@ -193,38 +157,32 @@ class _SettingsPageState extends State<SettingsPage> {
       },
     );
 
-    if (selectedMode != null && selectedMode != _themeMode) {
-      setState(() {
-        _themeMode = selectedMode;
-      });
-      await ThemeController.updateThemeMode(selectedMode);
+    if (selectedMode != null && mounted) {
+      context.read<ConfigStore>().setThemeMode(selectedMode);
     }
   }
 
-  String _localeLabel(Locale? locale) {
-    if (locale == null) {
-      return S.of(context).settingsLanguageSystem;
-    }
+  String _localeLabel(Locale locale) {
     return S.localeSets[locale.languageCode] ?? locale.languageCode;
   }
 
   Future<void> _showLanguageSelector() async {
     final strings = S.of(context);
     final options = [
-      MapEntry<Locale?, String>(null, strings.settingsLanguageSystem),
       ...S.supportedLocales.map(
-        (locale) => MapEntry<Locale?, String>(
-          locale,
+        (locale) => MapEntry<String, String>(
+          locale.languageCode,
           S.localeSets[locale.languageCode] ?? locale.languageCode,
         ),
       ),
     ];
 
-    // 使用包装类来区分"选择了系统默认(null)"和"未选择直接关闭"
-    final selection = await showModalBottomSheet<_LocaleSelection>(
+    // 返回所选的 Locale，如果直接关闭则返回 null
+    final selectedLocale = await showModalBottomSheet<Locale>(
       context: context,
       builder: (context) {
         final theme = Theme.of(context);
+        final currentLocale = context.read<ConfigStore>().locale;
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -241,16 +199,22 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ),
-              RadioGroup<Locale?>(
-                groupValue: _locale,
+              RadioGroup<String>(
+                groupValue: currentLocale.languageCode,
                 onChanged: (value) {
-                  Navigator.of(context).pop(_LocaleSelection(value));
+                  if (value != null) {
+                    final locale = S.supportedLocales.firstWhere(
+                      (l) => l.languageCode == value,
+                      orElse: () => S.supportedLocales.first,
+                    );
+                    Navigator.of(context).pop(locale);
+                  }
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: options
                       .map(
-                        (option) => RadioListTile<Locale?>(
+                        (option) => RadioListTile<String>(
                           value: option.key,
                           title: Text(option.value),
                         ),
@@ -266,22 +230,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
 
     // 只有用户明确选择了选项才更新
-    if (selection != null) {
-      final selectedLocale = selection.locale;
-      final isSameLocale =
-          selectedLocale?.languageCode == _locale?.languageCode;
-      if (!isSameLocale) {
-        setState(() {
-          _locale = selectedLocale;
-        });
-        await LanguageController.updateLocale(selectedLocale);
-      }
+    if (selectedLocale != null && mounted) {
+      context.read<ConfigStore>().setLocale(selectedLocale);
     }
   }
-}
-
-/// 用于区分"选择了系统默认(null)"和"未选择直接关闭弹窗"
-class _LocaleSelection {
-  final Locale? locale;
-  const _LocaleSelection(this.locale);
 }

@@ -5,6 +5,7 @@ import 'package:beadneko/core/palette.dart';
 import 'package:beadneko/core/pixel_processor.dart';
 import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/utils/image_saver.dart';
+import 'package:beadneko/utils/sp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,11 +20,45 @@ class Store {
   static MultiProvider init(Widget child) {
     return MultiProvider(
       providers: [
+        // 配置中心 (语言 + 主题)
+        ChangeNotifierProvider(
+          create: (_) => ConfigStore(
+            locale: SPUtil.getLocale(),
+            themeMode: SPUtil.getThemeMode(),
+          ),
+        ),
         // 项目状态
         ChangeNotifierProvider(create: (_) => BeadProjectProvider()),
       ],
       child: child,
     );
+  }
+}
+
+/// 全局配置
+class ConfigStore with ChangeNotifier {
+  Locale _locale;
+  ThemeMode _themeMode;
+
+  ConfigStore({required Locale locale, ThemeMode themeMode = ThemeMode.system})
+    : _locale = locale,
+      _themeMode = themeMode;
+
+  Locale get locale => _locale;
+  ThemeMode get themeMode => _themeMode;
+
+  void setLocale(Locale locale) {
+    if (_locale.toLanguageTag() == locale.toLanguageTag()) return;
+    _locale = locale;
+    SPUtil.setLocale(locale.languageCode);
+    notifyListeners();
+  }
+
+  void setThemeMode(ThemeMode mode) {
+    if (_themeMode == mode) return;
+    _themeMode = mode;
+    SPUtil.setThemeMode(mode);
+    notifyListeners();
   }
 }
 

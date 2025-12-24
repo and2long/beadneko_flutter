@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const themeColor = Colors.pink;
@@ -51,46 +50,10 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       brightness: Brightness.light,
       seedColor: themeColor,
-      secondary: secondaryColor,
-      surface: AppColors.bgLight,
     ),
     fontFamily: GoogleFonts.fredoka().fontFamily,
-    appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      foregroundColor: AppColors.textDark,
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark, // Android dark icons
-        statusBarBrightness: Brightness.light, // iOS dark icons
-      ),
-    ),
-    scaffoldBackgroundColor: AppColors.bgLight,
+    appBarTheme: const AppBarTheme(centerTitle: true, elevation: 1),
     dividerTheme: DividerThemeData(color: Colors.grey[200], thickness: 1),
-    textTheme: GoogleFonts.fredokaTextTheme(
-      const TextTheme(
-        displayLarge: TextStyle(color: AppColors.textDark),
-        displayMedium: TextStyle(color: AppColors.textDark),
-        displaySmall: TextStyle(color: AppColors.textDark),
-        headlineLarge: TextStyle(color: AppColors.textDark),
-        headlineMedium: TextStyle(color: AppColors.textDark),
-        headlineSmall: TextStyle(color: AppColors.textDark),
-        titleLarge: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textDark,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textDark,
-        ),
-        bodyLarge: TextStyle(color: AppColors.textDark),
-        bodyMedium: TextStyle(fontSize: 14, color: AppColors.textLight),
-        bodySmall: TextStyle(color: AppColors.textLight),
-      ),
-    ),
   );
 
   static ThemeData dark = ThemeData(
@@ -98,20 +61,9 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       brightness: Brightness.dark,
       seedColor: themeColor,
-      secondary: secondaryColor,
     ),
     fontFamily: GoogleFonts.fredoka().fontFamily,
-    appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      elevation: 0,
-      backgroundColor: Colors.pink, // Darker pink
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light, // Android light icons
-        statusBarBrightness: Brightness.dark, // iOS light icons
-      ),
-    ),
+    appBarTheme: const AppBarTheme(centerTitle: true, elevation: 1),
     dividerTheme: DividerThemeData(color: Colors.grey[900], thickness: 1),
-    textTheme: GoogleFonts.fredokaTextTheme(ThemeData.dark().textTheme),
   );
 }
