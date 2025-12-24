@@ -36,9 +36,7 @@ class HomePage extends StatelessWidget {
   // Helper method to get card background color based on theme
   Color _getCardColor(BuildContext context) {
     final brightness = Theme.of(context).brightness;
-    return brightness == Brightness.dark
-        ? AppColors.cardDark
-        : Colors.white;
+    return brightness == Brightness.dark ? AppColors.cardDark : Colors.white;
   }
 
   // Helper method to get background gradient based on theme
@@ -140,10 +138,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 S.of(context).homeDesc,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: textLightColor,
-                ),
+                style: TextStyle(fontSize: 16, color: textLightColor),
               ),
               const SizedBox(height: 32),
               // Action Grid
@@ -163,9 +158,7 @@ class HomePage extends StatelessWidget {
                 icon: Icons.camera_alt_outlined,
                 iconColor: const Color(0xFF00C9B1),
                 textColor: textColor,
-                gradient: LinearGradient(
-                  colors: [cardColor, cardColor],
-                ),
+                gradient: LinearGradient(colors: [cardColor, cardColor]),
                 onTap: () {
                   _checkCameraPermissionAndPickImage(context);
                 },
@@ -208,7 +201,11 @@ class HomePage extends StatelessWidget {
                   ).listenable(),
                   builder: (context, Box<BeadProject> box, _) {
                     if (box.isEmpty) {
-                      return _buildEmptyState(context, textColor, textLightColor);
+                      return _buildEmptyState(
+                        context,
+                        textColor,
+                        textLightColor,
+                      );
                     }
                     final projects = box.values.toList().reversed.toList();
                     return ListView.builder(
@@ -217,7 +214,13 @@ class HomePage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final project = projects[index];
                         final key = box.keyAt(box.length - 1 - index);
-                        return _buildProjectItem(context, project, key, box, textColor);
+                        return _buildProjectItem(
+                          context,
+                          project,
+                          key,
+                          box,
+                          textColor,
+                        );
                       },
                     );
                   },
@@ -231,7 +234,11 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, Color textColor, Color textLightColor) {
+  Widget _buildEmptyState(
+    BuildContext context,
+    Color textColor,
+    Color textLightColor,
+  ) {
     final brightness = Theme.of(context).brightness;
     final borderColor = brightness == Brightness.dark
         ? Colors.grey[700]
@@ -329,6 +336,7 @@ class HomePage extends StatelessWidget {
               _showDeleteDialog(context, box, key);
             },
             child: Container(
+              width: 140,
               height: 140,
               decoration: BoxDecoration(
                 color: cardColor,
@@ -341,14 +349,20 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(6),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.file(
-                  File(project.originalImagePath),
-                  fit: BoxFit.cover,
-                  errorBuilder: (ctx, err, stack) =>
-                      const Icon(Icons.broken_image),
+                borderRadius: BorderRadius.circular(26),
+                child: SizedBox.expand(
+                  child: Image.file(
+                    File(project.originalImagePath),
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stack) => Container(
+                      color: brightness == Brightness.dark
+                          ? Colors.grey[800]
+                          : Colors.grey[200],
+                      child: const Icon(Icons.broken_image, size: 40),
+                    ),
+                  ),
                 ),
               ),
             ),
