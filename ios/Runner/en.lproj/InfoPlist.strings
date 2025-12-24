@@ -1,0 +1,6 @@
+/* Photo Library Permission */
+NSPhotoLibraryUsageDescription = "BeadNeko needs access to your photo library to select images for pixelation.";
+NSPhotoLibraryAddUsageDescription = "BeadNeko needs access to save your pixel art to your photo library.";
+
+/* Camera Permission */
+NSCameraUsageDescription = "BeadNeko needs access to your camera to take photos for pixelation.";

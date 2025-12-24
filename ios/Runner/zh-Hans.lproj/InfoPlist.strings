@@ -1,0 +1,6 @@
+/* Photo Library Permission */
+NSPhotoLibraryUsageDescription = "BeadNeko 需要访问您的照片库，以便选择图片进行像素化处理。";
+NSPhotoLibraryAddUsageDescription = "BeadNeko 需要访问权限才能将您的像素艺术保存到照片库。";
+
+/* Camera Permission */
+NSCameraUsageDescription = "BeadNeko 需要访问您的相机，以便拍照进行像素化处理。";

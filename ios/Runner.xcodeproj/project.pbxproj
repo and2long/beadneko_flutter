@@ -16,6 +16,9 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		C27BD65D2EFC19A600776A5B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C27BD6552EFC19A600776A5B /* InfoPlist.strings */; };
+		C27BD65E2EFC19A600776A5B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C27BD6582EFC19A600776A5B /* InfoPlist.strings */; };
+		C27BD65F2EFC19A600776A5B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C27BD65B2EFC19A600776A5B /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +66,9 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9898CA70536BCD4BD1BE0069 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		AE4C1E3D534281FC1E62675C /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C27BD6542EFC19A600776A5B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		C27BD6572EFC19A600776A5B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = InfoPlist.strings; sourceTree = "<group>"; };
+		C27BD65A2EFC19A600776A5B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = InfoPlist.strings; sourceTree = "<group>"; };
 		D92A51072C6D67FD2F38831E /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		E9263D071C4FD95C4D6B586A /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,7 +103,6 @@
 				20E44FF8BBB051821241D99B /* Pods-RunnerTests.release.xcconfig */,
 				E9263D071C4FD95C4D6B586A /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -153,6 +158,9 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				C27BD6562EFC19A600776A5B /* en.lproj */,
+				C27BD6592EFC19A600776A5B /* ja.lproj */,
+				C27BD65C2EFC19A600776A5B /* zh-Hans.lproj */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -163,6 +171,30 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		C27BD6562EFC19A600776A5B /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				C27BD6552EFC19A600776A5B /* InfoPlist.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		C27BD6592EFC19A600776A5B /* ja.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				C27BD6582EFC19A600776A5B /* InfoPlist.strings */,
+			);
+			path = ja.lproj;
+			sourceTree = "<group>";
+		};
+		C27BD65C2EFC19A600776A5B /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				C27BD65B2EFC19A600776A5B /* InfoPlist.strings */,
+			);
+			path = "zh-Hans.lproj";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +269,8 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
+				"zh-Hans",
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
@@ -265,6 +299,9 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				C27BD65D2EFC19A600776A5B /* InfoPlist.strings in Resources */,
+				C27BD65E2EFC19A600776A5B /* InfoPlist.strings in Resources */,
+				C27BD65F2EFC19A600776A5B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +462,30 @@
 				97C147001CF9000F007C117D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		C27BD6552EFC19A600776A5B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C27BD6542EFC19A600776A5B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C27BD6582EFC19A600776A5B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C27BD6572EFC19A600776A5B /* ja */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C27BD65B2EFC19A600776A5B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C27BD65A2EFC19A600776A5B /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
