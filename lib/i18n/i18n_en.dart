@@ -155,4 +155,15 @@ class ProjectLocalizationsEN implements S {
   @override
   String get permissionSaveContent =>
       'BeadNeko needs access to save your bead patterns to the photo library.';
+
+  @override
+  String get permissionCameraTitle => 'Camera Access Required';
+
+  @override
+  String get permissionCameraContent =>
+      'BeadNeko needs access to your camera to let you take photos for creating bead patterns.';
+
+  @override
+  String get permissionCameraSettingsContent =>
+      'BeadNeko cannot access your camera. Please enable camera access in the app settings to continue.';
 }

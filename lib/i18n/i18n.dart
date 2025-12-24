@@ -122,4 +122,7 @@ abstract class S {
   String get permissionOpenSettings;
   String get permissionSaveTitle;
   String get permissionSaveContent;
+  String get permissionCameraTitle;
+  String get permissionCameraContent;
+  String get permissionCameraSettingsContent;
 }

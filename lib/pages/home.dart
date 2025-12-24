@@ -130,7 +130,7 @@ class HomePage extends StatelessWidget {
                   colors: [Colors.white, Colors.white],
                 ),
                 onTap: () {
-                  _pickImage(context, source: ImageSource.camera);
+                  _checkCameraPermissionAndPickImage(context);
                 },
               ),
               const SizedBox(height: 40),
@@ -403,6 +403,82 @@ class HomePage extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Text(S.of(context).permissionSettingsTitle),
         content: Text(S.of(context).permissionPhotoSettingsContent),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              openAppSettings();
+            },
+            child: Text(S.of(context).permissionOpenSettings),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _checkCameraPermissionAndPickImage(
+      BuildContext context) async {
+    // Check current status
+    PermissionStatus status = await Permission.camera.status;
+
+    if (status.isGranted) {
+      if (context.mounted) {
+        _pickImage(context, source: ImageSource.camera);
+      }
+      return;
+    }
+
+    if (status.isPermanentlyDenied) {
+      if (context.mounted) {
+        _showCameraSettingsDialog(context);
+      }
+      return;
+    }
+
+    // Show custom permission rationale dialog first
+    if (context.mounted) {
+      final bool shouldContinue =
+          await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(S.of(context).permissionCameraTitle),
+              content: Text(S.of(context).permissionCameraContent),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(S.of(context).cancel),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(S.of(context).permissionAllow),
+                ),
+              ],
+            ),
+          ) ??
+          false;
+
+      if (shouldContinue) {
+        // Request system permission after user confirmed
+        final result = await Permission.camera.request();
+        if (result.isGranted && context.mounted) {
+          _pickImage(context, source: ImageSource.camera);
+        } else if (result.isPermanentlyDenied && context.mounted) {
+          _showCameraSettingsDialog(context);
+        }
+      }
+    }
+  }
+
+  Future<void> _showCameraSettingsDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).permissionSettingsTitle),
+        content: Text(S.of(context).permissionCameraSettingsContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

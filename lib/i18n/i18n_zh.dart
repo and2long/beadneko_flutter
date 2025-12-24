@@ -152,4 +152,14 @@ class ProjectLocalizationsZH implements S {
 
   @override
   String get permissionSaveContent => 'BeadNeko 需要访问权限才能将您的拼豆图案保存到照片库。';
+
+  @override
+  String get permissionCameraTitle => '需要相机访问权限';
+
+  @override
+  String get permissionCameraContent => 'BeadNeko 需要访问您的相机，以便您拍照制作拼豆图案。';
+
+  @override
+  String get permissionCameraSettingsContent =>
+      'BeadNeko 无法访问您的相机。请在应用设置中启用相机访问以继续。';
 }

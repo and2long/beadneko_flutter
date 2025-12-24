@@ -153,4 +153,15 @@ class ProjectLocalizationsJA implements S {
 
   @override
   String get permissionSaveContent => 'ビーズの図案を写真ライブラリに保存するには、アクセス権限が必要です。';
+
+  @override
+  String get permissionCameraTitle => 'カメラへのアクセスが必要です';
+
+  @override
+  String get permissionCameraContent =>
+      'BeadNekoがビーズ図案を作成するための写真を撮影するには、カメラへのアクセスを許可してください。';
+
+  @override
+  String get permissionCameraSettingsContent =>
+      'カメラにアクセスできません。続行するには、設定からカメラのアクセスを有効にしてください。';
 }
