@@ -17,11 +17,48 @@ import 'package:provider/provider.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  // Helper method to get text color based on theme
+  Color _getTextColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark
+        ? AppColors.textDarkDark
+        : AppColors.textDark;
+  }
+
+  // Helper method to get secondary text color based on theme
+  Color _getTextLightColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark
+        ? AppColors.textLightDark
+        : AppColors.textLight;
+  }
+
+  // Helper method to get card background color based on theme
+  Color _getCardColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark
+        ? AppColors.cardDark
+        : Colors.white;
+  }
+
+  // Helper method to get background gradient based on theme
+  LinearGradient _getBackgroundGradient(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark
+        ? AppGradients.backgroundDark
+        : AppGradients.background;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final textColor = _getTextColor(context);
+    final textLightColor = _getTextLightColor(context);
+    final cardColor = _getCardColor(context);
+    final backgroundGradient = _getBackgroundGradient(context);
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppGradients.background),
+        decoration: BoxDecoration(gradient: backgroundGradient),
         child: SafeArea(
           bottom: false,
           child: ListView(
@@ -44,12 +81,12 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Text(
+                  Text(
                     'BeadNeko',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textDark,
+                      color: textColor,
                     ),
                   ),
                   const Spacer(),
@@ -70,9 +107,9 @@ class HomePage extends StatelessWidget {
               // Title Section
               Text(
                 S.of(context).homeTitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
-                  color: AppColors.textDark,
+                  color: textColor,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -85,7 +122,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: S.of(context).homeSubtitle1,
-                      style: const TextStyle(color: AppColors.textDark),
+                      style: TextStyle(color: textColor),
                     ),
                     TextSpan(
                       text: S.of(context).homeSubtitle2,
@@ -95,7 +132,7 @@ class HomePage extends StatelessWidget {
                     ),
                     TextSpan(
                       text: S.of(context).homeSubtitle3,
-                      style: const TextStyle(color: AppColors.textDark),
+                      style: TextStyle(color: textColor),
                     ),
                   ],
                 ),
@@ -103,9 +140,9 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 S.of(context).homeDesc,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  color: AppColors.textLight,
+                  color: textLightColor,
                 ),
               ),
               const SizedBox(height: 32),
@@ -125,9 +162,9 @@ class HomePage extends StatelessWidget {
                 subtitle: S.of(context).homeActionCameraSub,
                 icon: Icons.camera_alt_outlined,
                 iconColor: const Color(0xFF00C9B1),
-                textColor: AppColors.textDark,
-                gradient: const LinearGradient(
-                  colors: [Colors.white, Colors.white],
+                textColor: textColor,
+                gradient: LinearGradient(
+                  colors: [cardColor, cardColor],
                 ),
                 onTap: () {
                   _checkCameraPermissionAndPickImage(context);
@@ -141,10 +178,10 @@ class HomePage extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     S.of(context).homeRecentProjects,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textDark,
+                      color: textColor,
                     ),
                   ),
                   const Spacer(),
@@ -154,7 +191,7 @@ class HomePage extends StatelessWidget {
                     },
                     child: Text(
                       S.of(context).homeViewAll,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primaryGradientStart,
                         fontWeight: FontWeight.bold,
                       ),
@@ -171,7 +208,7 @@ class HomePage extends StatelessWidget {
                   ).listenable(),
                   builder: (context, Box<BeadProject> box, _) {
                     if (box.isEmpty) {
-                      return _buildEmptyState(context);
+                      return _buildEmptyState(context, textColor, textLightColor);
                     }
                     final projects = box.values.toList().reversed.toList();
                     return ListView.builder(
@@ -180,7 +217,7 @@ class HomePage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final project = projects[index];
                         final key = box.keyAt(box.length - 1 - index);
-                        return _buildProjectItem(context, project, key, box);
+                        return _buildProjectItem(context, project, key, box, textColor);
                       },
                     );
                   },
@@ -194,9 +231,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(BuildContext context, Color textColor, Color textLightColor) {
+    final brightness = Theme.of(context).brightness;
+    final borderColor = brightness == Brightness.dark
+        ? Colors.grey[700]
+        : Colors.grey[300];
+    final emptyTextColor = brightness == Brightness.dark
+        ? Colors.grey[500]
+        : Colors.grey;
+
     return DashedContainer(
-      color: Colors.grey[300]!,
+      color: borderColor!,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
@@ -206,7 +251,7 @@ class HomePage extends StatelessWidget {
             Text(
               S.of(context).homeEmptyState,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.grey, fontSize: 16),
+              style: TextStyle(color: emptyTextColor, fontSize: 16),
             ),
             const SizedBox(height: 24),
             GestureDetector(
@@ -255,7 +300,14 @@ class HomePage extends StatelessWidget {
     BeadProject project,
     dynamic key,
     Box<BeadProject> box,
+    Color textColor,
   ) {
+    final cardColor = _getCardColor(context);
+    final brightness = Theme.of(context).brightness;
+    final shadowColor = brightness == Brightness.dark
+        ? Colors.black.withOpacity(0.3)
+        : Colors.black.withOpacity(0.05);
+
     return Container(
       width: 140,
       margin: const EdgeInsets.only(right: 16),
@@ -279,11 +331,11 @@ class HomePage extends StatelessWidget {
             child: Container(
               height: 140,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(32),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: shadowColor,
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -304,10 +356,10 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             '${project.targetSize}x${project.targetSize}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: AppColors.textDark,
+              color: textColor,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
