@@ -159,6 +159,7 @@ class HomePage extends StatelessWidget {
                 iconColor: const Color(0xFF00C9B1),
                 textColor: textColor,
                 gradient: LinearGradient(colors: [cardColor, cardColor]),
+                iconBackgroundColor: const Color(0xFF00C9B1).withOpacity(0.08),
                 onTap: () {
                   _checkCameraPermissionAndPickImage(context);
                 },
