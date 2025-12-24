@@ -41,266 +41,38 @@ class EditorPage extends StatelessWidget {
               ),
             );
           }
-          return Column(
-            children: [
-              // Grid View at the top
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: InteractiveViewer(
-                    minScale: 0.1,
-                    maxScale: 10.0,
-                    boundaryMargin: const EdgeInsets.all(20.0),
-                    child: Center(child: BeadGridView(grid: project.grid!)),
-                  ),
-                ),
-              ),
-              // Controls at the bottom
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, -5),
-                    ),
-                  ],
-                ),
-                child: SafeArea(
-                  top: false,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 24,
-                        ),
-                        child: Column(
-                          children: [
-                            _buildGridSizeControl(context, project),
-                            const SizedBox(height: 24),
-                            _buildPaletteSizeControl(context, project),
-                          ],
-                        ),
-                      ),
-                      // Action Button at the very bottom
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          bottom: 20,
-                        ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: () =>
-                                _showColorStatsBottomSheet(context, project),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFFF4081),
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(28),
-                              ),
-                            ),
-                            child: Text(
-                              S.of(context).editorStatsTitle,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = constraints.maxWidth;
 
-  Widget _buildGridSizeControl(
-    BuildContext context,
-    BeadProjectProvider project,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+              return Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF4081).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.grid_view,
-                      color: Color(0xFFFF4081),
-                      size: 20,
+                  // Grid View at the top - fixed height equals screen width
+                  SizedBox(
+                    height: screenWidth,
+                    width: double.infinity,
+                    child: Container(
+                      color: Colors.white,
+                      child: InteractiveViewer(
+                        minScale: 0.1,
+                        maxScale: 10.0,
+                        boundaryMargin: EdgeInsets.zero,
+                        child: BeadGridView(grid: project.grid!),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Text(
-                    S.of(context).editorPixelSize,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1C1E),
+                  // Controls at the bottom - scrollable
+                  Expanded(
+                    child: _ControlPanel(
+                      project: project,
+                      onShowStats: () => _showColorStatsBottomSheet(context, project),
                     ),
                   ),
                 ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF4081).withOpacity(0.08),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  "${project.targetSize}",
-                  style: const TextStyle(
-                    color: Color(0xFFFF4081),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: const Color(0xFFFF4081),
-              inactiveTrackColor: const Color(0xFFFF4081).withOpacity(0.1),
-              thumbColor: const Color(0xFFFF4081),
-              overlayColor: const Color(0xFFFF4081).withOpacity(0.1),
-              trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 24),
-            ),
-            child: Slider(
-              value: project.targetSize.toDouble(),
-              min: 16,
-              max: 128,
-              divisions: 7, // 16, 32, 48, 64, 80, 96, 112, 128
-              onChanged: (value) {
-                project.updateTargetSize(value.toInt());
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "16x",
-                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
-                ),
-                Text(
-                  "48x",
-                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
-                ),
-                Text(
-                  "80x",
-                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
-                ),
-                Text(
-                  "128x",
-                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPaletteSizeControl(
-    BuildContext context,
-    BeadProjectProvider project,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF4081).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.palette,
-                  color: Color(0xFFFF4081),
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                S.of(context).editorPalette,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1C1E),
-                ),
-              ),
-            ],
-          ),
-          DropdownButton<int>(
-            value: project.paletteSize,
-            underline: const SizedBox(),
-            icon: const Icon(Icons.keyboard_arrow_down),
-            items: [72, 96, 120, 144, 168, 291].map((int value) {
-              return DropdownMenuItem<int>(
-                value: value,
-                child: Text(
-                  value == 291
-                      ? '${S.of(context).editorPaletteAll} ($value)'
-                      : '$value ${S.of(context).editorPaletteColors}',
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
               );
-            }).toList(),
-            onChanged: (int? newValue) {
-              if (newValue != null) {
-                project.setPaletteSize(newValue);
-              }
             },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -565,6 +337,262 @@ class EditorPage extends StatelessWidget {
               openAppSettings();
             },
             child: Text(S.of(context).permissionOpenSettings),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ControlPanel extends StatelessWidget {
+  final BeadProjectProvider project;
+  final VoidCallback onShowStats;
+
+  const _ControlPanel({
+    required this.project,
+    required this.onShowStats,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
+                child: Column(
+                  children: [
+                    _buildGridSizeControl(context, project),
+                    const SizedBox(height: 24),
+                    _buildPaletteSizeControl(context, project),
+                  ],
+                ),
+              ),
+              // Action Button at the very bottom
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  bottom: 20,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: onShowStats,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF4081),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                    ),
+                    child: Text(
+                      S.of(context).editorStatsTitle,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGridSizeControl(
+    BuildContext context,
+    BeadProjectProvider project,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF4081).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.grid_view,
+                      color: Color(0xFFFF4081),
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    S.of(context).editorPixelSize,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A1C1E),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFF4081).withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Text(
+                  "${project.targetSize}",
+                  style: const TextStyle(
+                    color: Color(0xFFFF4081),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: const Color(0xFFFF4081),
+              inactiveTrackColor: const Color(0xFFFF4081).withOpacity(0.1),
+              thumbColor: const Color(0xFFFF4081),
+              overlayColor: const Color(0xFFFF4081).withOpacity(0.1),
+              trackHeight: 4,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 24),
+            ),
+            child: Slider(
+              value: project.targetSize.toDouble(),
+              min: 16,
+              max: 128,
+              divisions: 7, // 16, 32, 48, 64, 80, 96, 112, 128
+              onChanged: (value) {
+                project.updateTargetSize(value.toInt());
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "16x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+                Text(
+                  "48x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+                Text(
+                  "80x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+                Text(
+                  "128x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPaletteSizeControl(
+    BuildContext context,
+    BeadProjectProvider project,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFF4081).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.palette,
+                  color: Color(0xFFFF4081),
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                S.of(context).editorPalette,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A1C1E),
+                ),
+              ),
+            ],
+          ),
+          DropdownButton<int>(
+            value: project.paletteSize,
+            underline: const SizedBox(),
+            icon: const Icon(Icons.keyboard_arrow_down),
+            items: [72, 96, 120, 144, 168, 291].map((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text(
+                  value == 291
+                      ? '${S.of(context).editorPaletteAll} ($value)'
+                      : '$value ${S.of(context).editorPaletteColors}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              );
+            }).toList(),
+            onChanged: (int? newValue) {
+              if (newValue != null) {
+                project.setPaletteSize(newValue);
+              }
+            },
           ),
         ],
       ),

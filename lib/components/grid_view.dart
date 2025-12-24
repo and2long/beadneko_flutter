@@ -13,25 +13,23 @@ class BeadGridView extends StatelessWidget {
     final int rows = grid.length;
     final int cols = grid[0].length;
 
-    return AspectRatio(
-      aspectRatio: cols / rows,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final double beadSize = constraints.maxWidth / cols;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Use the smaller dimension to make it a square within available space
+        final double size = constraints.maxWidth < constraints.maxHeight
+            ? constraints.maxWidth
+            : constraints.maxHeight;
+        final double beadSize = size / cols;
 
-          return CustomPaint(
-            painter: BeadGridPainter(
-              grid: grid,
-              beadSize: beadSize,
-              showCodes: false,
-            ),
-            size: Size(
-              constraints.maxWidth,
-              constraints.maxWidth * rows / cols,
-            ),
-          );
-        },
-      ),
+        return CustomPaint(
+          painter: BeadGridPainter(
+            grid: grid,
+            beadSize: beadSize,
+            showCodes: false,
+          ),
+          size: Size(size, size * rows / cols),
+        );
+      },
     );
   }
 }
