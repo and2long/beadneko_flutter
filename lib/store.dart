@@ -68,7 +68,7 @@ class BeadProjectProvider with ChangeNotifier {
   Uint8List? _originalImage;
   String? _originalImagePath; // Keep track of path
   List<List<ProcessedPixel>>? _grid;
-  int _targetSize = 30; // Default 30x30
+  int _targetSize = 60; // Default 60x60
   bool _isProcessing = false;
 
   dynamic _currentProjectKey; // Hive key for current project

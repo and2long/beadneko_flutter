@@ -117,6 +117,9 @@ class ProjectLocalizationsEN implements S {
   String get editorSaveFailure => 'Failed to save or permission denied';
 
   @override
+  String get editorExporting => 'Exporting...';
+
+  @override
   String get deleteTitle => 'Delete Project';
 
   @override

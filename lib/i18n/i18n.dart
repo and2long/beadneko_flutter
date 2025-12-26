@@ -108,6 +108,7 @@ abstract class S {
   String get editorStatsUnit;
   String get editorSaveSuccess;
   String get editorSaveFailure;
+  String get editorExporting;
 
   // Dialogs & Permissions
   String get deleteTitle;

@@ -116,6 +116,9 @@ class ProjectLocalizationsJA implements S {
   String get editorSaveFailure => '保存に失敗したか、アクセス権限がありません';
 
   @override
+  String get editorExporting => 'エクスポート中...';
+
+  @override
   String get deleteTitle => 'プロジェクトを削除';
 
   @override

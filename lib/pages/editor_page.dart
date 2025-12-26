@@ -63,7 +63,8 @@ class EditorPage extends StatelessWidget {
                       Expanded(
                         child: _ControlPanel(
                           project: project,
-                          onShowStats: () => _showColorStatsBottomSheet(context, project),
+                          onShowStats: () =>
+                              _showColorStatsBottomSheet(context, project),
                         ),
                       ),
                     ],
@@ -77,10 +78,10 @@ class EditorPage extends StatelessWidget {
                       child: Container(
                         color: Colors.white.withValues(alpha: 0.9),
                         padding: const EdgeInsets.all(16),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
@@ -90,10 +91,10 @@ class EditorPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 12),
+                            const SizedBox(width: 12),
                             Text(
-                              'Exporting...',
-                              style: TextStyle(
+                              S.of(context).editorExporting,
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF1A1C1E),
@@ -141,7 +142,9 @@ class EditorPage extends StatelessWidget {
                 return Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(32),
+                    ),
                   ),
                   child: Column(
                     children: [
@@ -203,7 +206,9 @@ class EditorPage extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: entry.key.color.withValues(alpha: 0.3),
+                                          color: entry.key.color.withValues(
+                                            alpha: 0.3,
+                                          ),
                                           blurRadius: 8,
                                           offset: const Offset(0, 4),
                                         ),
@@ -216,7 +221,9 @@ class EditorPage extends StatelessWidget {
                                         height: 12,
                                         decoration: BoxDecoration(
                                           color: Colors.black12,
-                                          borderRadius: BorderRadius.circular(2),
+                                          borderRadius: BorderRadius.circular(
+                                            2,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -224,7 +231,8 @@ class EditorPage extends StatelessWidget {
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           entry.key.name,
@@ -382,10 +390,7 @@ class _ControlPanel extends StatelessWidget {
   final BeadProjectProvider project;
   final VoidCallback onShowStats;
 
-  const _ControlPanel({
-    required this.project,
-    required this.onShowStats,
-  });
+  const _ControlPanel({required this.project, required this.onShowStats});
 
   @override
   Widget build(BuildContext context) {
@@ -421,11 +426,7 @@ class _ControlPanel extends StatelessWidget {
               ),
               // Action Button at the very bottom
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  bottom: 20,
-                ),
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -522,7 +523,9 @@ class _ControlPanel extends StatelessWidget {
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: const Color(0xFFFF4081),
-              inactiveTrackColor: const Color(0xFFFF4081).withValues(alpha: 0.1),
+              inactiveTrackColor: const Color(
+                0xFFFF4081,
+              ).withValues(alpha: 0.1),
               thumbColor: const Color(0xFFFF4081),
               overlayColor: const Color(0xFFFF4081).withValues(alpha: 0.1),
               trackHeight: 3,

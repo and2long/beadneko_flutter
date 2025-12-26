@@ -116,6 +116,9 @@ class ProjectLocalizationsZH implements S {
   String get editorSaveFailure => '保存出错或权限被拒绝';
 
   @override
+  String get editorExporting => '正在导出...';
+
+  @override
   String get deleteTitle => '删除项目';
 
   @override

@@ -33,19 +33,23 @@ class ImageSaver {
       // Localized strings
       String colorStatsTitle;
       String gridLabel;
+      String typesLabel;
 
       switch (languageCode) {
         case 'zh':
           colorStatsTitle = '颜色统计';
           gridLabel = '网格';
+          typesLabel = '种';
           break;
         case 'ja':
           colorStatsTitle = 'カラー統計';
           gridLabel = 'グリッド';
+          typesLabel = '種類';
           break;
         default:
           colorStatsTitle = 'Color Statistics';
           gridLabel = 'Grid';
+          typesLabel = 'types';
       }
 
       // Calculate color statistics
@@ -163,7 +167,7 @@ class ImageSaver {
       // Draw section title
       final titlePainter = TextPainter(
         text: TextSpan(
-          text: '$colorStatsTitle (${sortedColors.length} types)',
+          text: '$colorStatsTitle (${sortedColors.length} $typesLabel)',
           style: TextStyle(
             fontSize: footerTitleFontSize,
             fontWeight: FontWeight.bold,
