@@ -340,7 +340,7 @@ class EditorPage extends StatelessWidget {
 
   Future<void> _saveImage(BuildContext context) async {
     final project = Provider.of<BeadProjectProvider>(context, listen: false);
-    final success = await project.saveImage();
+    final success = await project.saveImage(context);
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -531,9 +531,9 @@ class _ControlPanel extends StatelessWidget {
             ),
             child: Slider(
               value: project.targetSize.toDouble(),
-              min: 16,
-              max: 128,
-              divisions: 7, // 16, 32, 48, 64, 80, 96, 112, 128
+              min: 20,
+              max: 100,
+              divisions: 8, // 20, 30, 40, 50, 60, 70, 80, 90, 100
               onChanged: (value) {
                 project.updateTargetSize(value.toInt());
               },
@@ -545,11 +545,15 @@ class _ControlPanel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "16x",
+                  "20x",
                   style: TextStyle(color: Colors.grey[500], fontSize: 11),
                 ),
                 Text(
-                  "48x",
+                  "40x",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 11),
+                ),
+                Text(
+                  "60x",
                   style: TextStyle(color: Colors.grey[500], fontSize: 11),
                 ),
                 Text(
@@ -557,7 +561,7 @@ class _ControlPanel extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[500], fontSize: 11),
                 ),
                 Text(
-                  "128x",
+                  "100x",
                   style: TextStyle(color: Colors.grey[500], fontSize: 11),
                 ),
               ],

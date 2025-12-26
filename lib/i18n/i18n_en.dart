@@ -81,7 +81,7 @@ class ProjectLocalizationsEN implements S {
   String get homeViewAll => 'View All';
 
   @override
-  String get editorTitle => 'BeadNeko Editor';
+  String get editorTitle => 'Generate Bead Pattern';
 
   @override
   String get editorSelectImage => 'Select Image';
@@ -166,4 +166,7 @@ class ProjectLocalizationsEN implements S {
   @override
   String get permissionCameraSettingsContent =>
       'BeadNeko cannot access your camera. Please enable camera access in the app settings to continue.';
+
+  @override
+  String get appName => 'BeadNeko';
 }

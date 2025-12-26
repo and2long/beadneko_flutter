@@ -22,11 +22,31 @@ class ImageSaver {
   static Future<bool> saveGridImage(
     List<List<ProcessedPixel>> grid,
     int pixelSize,
+    String languageCode,
+    String appName,
   ) async {
     try {
       final int rows = grid.length;
       final int cols = grid[0].length;
       final double beadSize = 40.0; // Balanced resolution for quality and file size
+
+      // Localized strings
+      String colorStatsTitle;
+      String gridLabel;
+
+      switch (languageCode) {
+        case 'zh':
+          colorStatsTitle = '颜色统计';
+          gridLabel = '网格';
+          break;
+        case 'ja':
+          colorStatsTitle = 'カラー統計';
+          gridLabel = 'グリッド';
+          break;
+        default:
+          colorStatsTitle = 'Color Statistics';
+          gridLabel = 'Grid';
+      }
 
       // Calculate color statistics
       final Map<BeadColor, int> colorStats = {};
@@ -87,7 +107,7 @@ class ImageSaver {
       // Draw app name at top left (larger font)
       final appNamePainter = TextPainter(
         text: TextSpan(
-          text: 'Beadneko',
+          text: appName,
           style: TextStyle(
             fontSize: appNameFontSize,
             fontWeight: FontWeight.bold,
@@ -102,7 +122,7 @@ class ImageSaver {
       // Draw grid size info in header
       final gridSizePainter = TextPainter(
         text: TextSpan(
-          text: 'Grid: $cols × $rows  |  Pixels: $pixelSize',
+          text: '$gridLabel: $cols × $rows',
           style: TextStyle(
             fontSize: gridSizeFontSize,
             fontWeight: FontWeight.w500,
@@ -143,7 +163,7 @@ class ImageSaver {
       // Draw section title
       final titlePainter = TextPainter(
         text: TextSpan(
-          text: 'Color Statistics (${sortedColors.length} types)',
+          text: '$colorStatsTitle (${sortedColors.length} types)',
           style: TextStyle(
             fontSize: footerTitleFontSize,
             fontWeight: FontWeight.bold,
@@ -233,7 +253,7 @@ class ImageSaver {
           textDirection: TextDirection.ltr,
         );
         codePainter.layout();
-        codePainter.paint(canvas, Offset(textStartX, y + (itemHeight * 0.15)));
+        codePainter.paint(canvas, Offset(textStartX, y + (itemHeight * 0.20)));
 
         // Draw color count
         final countPainter = TextPainter(
@@ -248,7 +268,7 @@ class ImageSaver {
           textDirection: TextDirection.ltr,
         );
         countPainter.layout();
-        countPainter.paint(canvas, Offset(textStartX, y + (itemHeight * 0.50)));
+        countPainter.paint(canvas, Offset(textStartX, y + (itemHeight * 0.42)));
       }
 
       final picture = recorder.endRecording();

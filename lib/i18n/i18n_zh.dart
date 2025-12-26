@@ -80,7 +80,7 @@ class ProjectLocalizationsZH implements S {
   String get homeViewAll => '查看全部';
 
   @override
-  String get editorTitle => 'BeadNeko 编辑器';
+  String get editorTitle => '生成拼豆图纸';
 
   @override
   String get editorSelectImage => '选择图片';
@@ -162,4 +162,7 @@ class ProjectLocalizationsZH implements S {
   @override
   String get permissionCameraSettingsContent =>
       'BeadNeko 无法访问您的相机。请在应用设置中启用相机访问以继续。';
+
+  @override
+  String get appName => '拼豆猫';
 }

@@ -80,7 +80,7 @@ class ProjectLocalizationsJA implements S {
   String get homeViewAll => 'すべて表示';
 
   @override
-  String get editorTitle => 'BeadNeko エディタ';
+  String get editorTitle => 'ビーズ図案生成';
 
   @override
   String get editorSelectImage => '画像を選択';
@@ -164,4 +164,7 @@ class ProjectLocalizationsJA implements S {
   @override
   String get permissionCameraSettingsContent =>
       'カメラにアクセスできません。続行するには、設定からカメラのアクセスを有効にしてください。';
+
+  @override
+  String get appName => 'BeadNeko';
 }

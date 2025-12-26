@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:beadneko/core/palette.dart';
 import 'package:beadneko/core/pixel_processor.dart';
+import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/utils/image_saver.dart';
 import 'package:beadneko/utils/sp_util.dart';
@@ -67,7 +68,7 @@ class BeadProjectProvider with ChangeNotifier {
   Uint8List? _originalImage;
   String? _originalImagePath; // Keep track of path
   List<List<ProcessedPixel>>? _grid;
-  int _targetSize = 32; // Default 32x32
+  int _targetSize = 30; // Default 30x30
   bool _isProcessing = false;
 
   dynamic _currentProjectKey; // Hive key for current project
@@ -167,12 +168,19 @@ class BeadProjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> saveImage() async {
+  Future<bool> saveImage(BuildContext context) async {
     if (_grid == null) return false;
     _isProcessing = true;
     notifyListeners();
     try {
-      final success = await ImageSaver.saveGridImage(_grid!, _targetSize);
+      final locale = Localizations.localeOf(context);
+      final s = S.of(context);
+      final success = await ImageSaver.saveGridImage(
+        _grid!,
+        _targetSize,
+        locale.languageCode,
+        s.appName,
+      );
       if (success && _originalImagePath != null) {
         await _saveToHistory();
       }

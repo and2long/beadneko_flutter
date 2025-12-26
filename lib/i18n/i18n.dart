@@ -125,4 +125,7 @@ abstract class S {
   String get permissionCameraTitle;
   String get permissionCameraContent;
   String get permissionCameraSettingsContent;
+
+  // App name for export
+  String get appName;
 }

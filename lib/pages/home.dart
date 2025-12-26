@@ -178,19 +178,6 @@ class HomePage extends StatelessWidget {
                       color: textColor,
                     ),
                   ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      // Implement view all logic if applicable
-                    },
-                    child: Text(
-                      S.of(context).homeViewAll,
-                      style: TextStyle(
-                        color: AppColors.primaryGradientStart,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 12),
