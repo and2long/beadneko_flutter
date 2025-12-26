@@ -82,13 +82,13 @@ class BeadGridPainter extends CustomPainter {
         // Draw grid lines
         canvas.drawRect(rect, borderPaint);
 
-        // Draw Color Code if size permits
-        if (showCodes && beadSize > 12) {
+        // Draw Color Code if showCodes is true (no size restriction for export)
+        if (showCodes) {
           final textStyle = TextStyle(
             color: pixel.bead!.color.computeLuminance() > 0.5
                 ? Colors.black
                 : Colors.white,
-            fontSize: beadSize * 0.4,
+            fontSize: beadSize * 0.25,
             fontWeight: FontWeight.bold,
           );
           final textSpan = TextSpan(text: pixel.bead!.code, style: textStyle);
