@@ -32,3 +32,11 @@
 图标：猫脸 + 拼豆点
 按钮：圆角、暖色
 尽量简洁，第一版以工具化为主
+
+
+## Perler Bead 颜色参考
+https://www.beadmymood.com/perler-bead-names/
+
+## 参考网站
+- https://m.aitntnews.com/newDetail.html?newId=19982
+- https://pixelbeads.pics/

@@ -68,7 +68,6 @@ class BeadProjectProvider with ChangeNotifier {
   String? _originalImagePath; // Keep track of path
   List<List<ProcessedPixel>>? _grid;
   int _targetSize = 32; // Default 32x32
-  int _paletteSize = 291; // Default "All Colors"
   bool _isProcessing = false;
 
   dynamic _currentProjectKey; // Hive key for current project
@@ -76,7 +75,7 @@ class BeadProjectProvider with ChangeNotifier {
   Uint8List? get originalImage => _originalImage;
   List<List<ProcessedPixel>>? get grid => _grid;
   int get targetSize => _targetSize;
-  int get paletteSize => _paletteSize;
+
   bool get isProcessing => _isProcessing;
 
   Map<BeadColor, int> get colorStats {
@@ -140,13 +139,6 @@ class BeadProjectProvider with ChangeNotifier {
     }
   }
 
-  void setPaletteSize(int size) {
-    if (_paletteSize != size) {
-      _paletteSize = size;
-      processImage();
-    }
-  }
-
   Future<void> processImage() async {
     if (_originalImage == null) return;
 
@@ -154,11 +146,10 @@ class BeadProjectProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final palette = Palette.getPalette(_paletteSize);
       _grid = await PixelProcessor.processImage(
         _originalImage!,
         _targetSize,
-        palette,
+        Palette.allColors,
       );
     } catch (e) {
       debugPrint("Error processing image: $e");
