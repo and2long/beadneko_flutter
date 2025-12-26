@@ -28,10 +28,6 @@ class EditorPage extends StatelessWidget {
       ),
       body: Consumer<BeadProjectProvider>(
         builder: (context, project, child) {
-          if (project.isProcessing) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           if (project.grid == null) {
             return Center(
               child: ElevatedButton.icon(
@@ -45,29 +41,68 @@ class EditorPage extends StatelessWidget {
             builder: (context, constraints) {
               final screenWidth = constraints.maxWidth;
 
-              return Column(
+              return Stack(
                 children: [
-                  // Grid View at the top - fixed height equals screen width
-                  SizedBox(
-                    height: screenWidth,
-                    width: double.infinity,
-                    child: Container(
-                      color: Colors.white,
-                      child: InteractiveViewer(
-                        minScale: 0.1,
-                        maxScale: 10.0,
-                        boundaryMargin: EdgeInsets.zero,
-                        child: BeadGridView(grid: project.grid!),
+                  Column(
+                    children: [
+                      // Grid View at the top - fixed height equals screen width
+                      SizedBox(
+                        height: screenWidth,
+                        width: double.infinity,
+                        child: Container(
+                          color: Colors.white,
+                          child: InteractiveViewer(
+                            minScale: 0.1,
+                            maxScale: 10.0,
+                            boundaryMargin: EdgeInsets.zero,
+                            child: BeadGridView(grid: project.grid!),
+                          ),
+                        ),
+                      ),
+                      // Controls at the bottom - scrollable
+                      Expanded(
+                        child: _ControlPanel(
+                          project: project,
+                          onShowStats: () => _showColorStatsBottomSheet(context, project),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Loading indicator overlay at top - doesn't hide bottom content
+                  if (project.isProcessing)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: Colors.white.withOpacity(0.9),
+                        padding: const EdgeInsets.all(16),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Color(0xFFFF4081),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Exporting...',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF1A1C1E),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  // Controls at the bottom - scrollable
-                  Expanded(
-                    child: _ControlPanel(
-                      project: project,
-                      onShowStats: () => _showColorStatsBottomSheet(context, project),
-                    ),
-                  ),
                 ],
               );
             },

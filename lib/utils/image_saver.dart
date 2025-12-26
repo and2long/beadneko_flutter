@@ -4,10 +4,19 @@ import 'dart:ui' as ui;
 import 'package:beadneko/components/grid_view.dart'; // To access BeadGridPainter
 import 'package:beadneko/core/palette.dart';
 import 'package:beadneko/core/pixel_processor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:path_provider/path_provider.dart';
+
+// Top-level function for compute (must be static or top-level)
+Future<Uint8List> _convertPngToJpg(Uint8List pngBytes) async {
+  final decodedImage = img.decodePng(pngBytes);
+  if (decodedImage == null) throw Exception('Failed to decode PNG');
+  final jpgBytes = img.encodeJpg(decodedImage, quality: 92);
+  return jpgBytes;
+}
 
 class ImageSaver {
   static Future<bool> saveGridImage(
@@ -17,7 +26,7 @@ class ImageSaver {
     try {
       final int rows = grid.length;
       final int cols = grid[0].length;
-      final double beadSize = 80.0; // High resolution for clear export
+      final double beadSize = 40.0; // Balanced resolution for quality and file size
 
       // Calculate color statistics
       final Map<BeadColor, int> colorStats = {};
@@ -37,16 +46,18 @@ class ImageSaver {
       final sortedColors = colorStats.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
 
-      // Layout dimensions
-      const double borderPadding = 80.0; // White border around entire image
-      const double headerHeight = 200.0; // Increased header height
-      const double itemHeight = 120.0; // Height per color item (increased)
-      const double itemsPerRow = 5; // Colors per row
-      final int colorRows = (sortedColors.length / itemsPerRow).ceil();
-      final double footerHeight = 200 + (colorRows * itemHeight); // Dynamic footer height with more padding
-
+      // Calculate grid dimensions first
       final double gridWidth = cols * beadSize;
       final double gridHeight = rows * beadSize;
+
+      // Calculate all dimensions based on grid width for consistent proportions
+      const double borderPadding = 80.0; // White border around entire image
+      final double headerHeight = gridWidth * 0.15; // Header is 15% of grid width
+      final double itemHeight = gridWidth * 0.08; // Each color item is 8% of grid width
+      const double itemsPerRow = 5; // Colors per row
+      final int colorRows = (sortedColors.length / itemsPerRow).ceil();
+      final double footerHeight = (gridWidth * 0.12) + (colorRows * itemHeight); // Footer with dynamic height
+
       final double totalWidth = gridWidth + (borderPadding * 2);
       final double totalHeight = borderPadding + headerHeight + gridHeight + footerHeight + borderPadding;
 
@@ -59,12 +70,26 @@ class ImageSaver {
         Paint()..color = Colors.white,
       );
 
+      // Calculate all sizes based on grid width for consistent proportions
+      final double appNameFontSize = gridWidth * 0.035; // 3.5% of grid width
+      final double gridSizeFontSize = gridWidth * 0.014; // 1.4% of grid width
+      final double footerTitleFontSize = gridWidth * 0.020; // 2% of grid width
+      final double colorCodeFontSize = gridWidth * 0.014; // 1.4% of grid width
+      final double colorCountFontSize = gridWidth * 0.016; // 1.6% of grid width
+      final double beadRadius = gridWidth * 0.012; // 1.2% of grid width
+
+      // Calculate spacing based on grid width
+      final double headerTopPadding = headerHeight * 0.30; // 30% from top
+      final double headerBottomPadding = headerHeight * 0.25; // 25% from bottom
+      final double footerTitlePadding = gridWidth * 0.05; // 5% of grid width
+      final double footerListPadding = gridWidth * 0.12; // 12% of grid width
+
       // Draw app name at top left (larger font)
       final appNamePainter = TextPainter(
-        text: const TextSpan(
+        text: TextSpan(
           text: 'Beadneko',
           style: TextStyle(
-            fontSize: 80,
+            fontSize: appNameFontSize,
             fontWeight: FontWeight.bold,
             color: Color(0xFFFF4081),
           ),
@@ -72,14 +97,14 @@ class ImageSaver {
         textDirection: TextDirection.ltr,
       );
       appNamePainter.layout();
-      appNamePainter.paint(canvas, Offset(borderPadding + 30, borderPadding + 50));
+      appNamePainter.paint(canvas, Offset(borderPadding + 30, borderPadding + headerTopPadding));
 
       // Draw grid size info in header
       final gridSizePainter = TextPainter(
         text: TextSpan(
-          text: 'Grid: ${cols} × $rows  |  Pixels: $pixelSize',
-          style: const TextStyle(
-            fontSize: 32,
+          text: 'Grid: $cols × $rows  |  Pixels: $pixelSize',
+          style: TextStyle(
+            fontSize: gridSizeFontSize,
             fontWeight: FontWeight.w500,
             color: Color(0xFF666666),
           ),
@@ -89,7 +114,7 @@ class ImageSaver {
       gridSizePainter.layout();
       gridSizePainter.paint(
         canvas,
-        Offset(totalWidth - gridSizePainter.width - borderPadding - 30, borderPadding + 65),
+        Offset(totalWidth - gridSizePainter.width - borderPadding - 30, borderPadding + headerHeight - headerBottomPadding - gridSizePainter.height),
       );
 
       // Draw grid below header
@@ -119,8 +144,8 @@ class ImageSaver {
       final titlePainter = TextPainter(
         text: TextSpan(
           text: 'Color Statistics (${sortedColors.length} types)',
-          style: const TextStyle(
-            fontSize: 48,
+          style: TextStyle(
+            fontSize: footerTitleFontSize,
             fontWeight: FontWeight.bold,
             color: Color(0xFF1A1C1E),
           ),
@@ -130,7 +155,7 @@ class ImageSaver {
       titlePainter.layout();
       titlePainter.paint(
         canvas,
-        Offset(borderPadding + 30, footerY + 80),
+        Offset(borderPadding + 30, footerY + footerTitlePadding),
       );
 
       // Draw color items in a grid layout
@@ -142,17 +167,22 @@ class ImageSaver {
         final col = i % itemsPerRow;
 
         final double x = borderPadding + (col * itemWidth);
-        final double y = footerY + 180 + (row * itemHeight);
+        final double y = footerY + footerListPadding + (row * itemHeight);
+
+        // Calculate bead position and size based on proportions
+        final double beadCenterX = x + (beadRadius * 1.5);
+        final double beadCenterY = y + (itemHeight * 0.45);
+        final double shadowOffset = beadRadius * 0.25;
+        final double shadowBlur = beadRadius * 0.4;
+        final double textStartX = x + (beadRadius * 3.2);
 
         // Draw bead shadow (glow effect)
-        final shadowOffset = 12.0;
-        final shadowBlur = 16.0;
         final shadowPaint = Paint()
-          ..color = entry.key.color.withOpacity(0.3)
+          ..color = entry.key.color.withValues(alpha: 0.3)
           ..maskFilter = MaskFilter.blur(BlurStyle.normal, shadowBlur);
         canvas.drawCircle(
-          Offset(x + 60, y + 50 + shadowOffset),
-          40,
+          Offset(beadCenterX, beadCenterY + shadowOffset),
+          beadRadius,
           shadowPaint,
         );
 
@@ -161,8 +191,8 @@ class ImageSaver {
           ..color = entry.key.color
           ..style = PaintingStyle.fill;
         canvas.drawCircle(
-          Offset(x + 60, y + 50),
-          40,
+          Offset(beadCenterX, beadCenterY),
+          beadRadius,
           beadPaint,
         );
 
@@ -170,15 +200,21 @@ class ImageSaver {
         final borderPaint = Paint()
           ..color = Colors.black12
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.0;
+          ..strokeWidth = beadRadius * 0.05;
         canvas.drawCircle(
-          Offset(x + 60, y + 50),
-          40,
+          Offset(beadCenterX, beadCenterY),
+          beadRadius,
           borderPaint,
         );
 
         // Draw small center square decoration
-        final centerRect = Rect.fromLTWH(x + 52, y + 42, 16, 16);
+        final centerSize = beadRadius * 0.4;
+        final centerRect = Rect.fromLTWH(
+          beadCenterX - (centerSize / 2),
+          beadCenterY - (centerSize / 2),
+          centerSize,
+          centerSize,
+        );
         final centerPaint = Paint()
           ..color = Colors.black12
           ..style = PaintingStyle.fill;
@@ -188,8 +224,8 @@ class ImageSaver {
         final codePainter = TextPainter(
           text: TextSpan(
             text: entry.key.code,
-            style: const TextStyle(
-              fontSize: 32,
+            style: TextStyle(
+              fontSize: colorCodeFontSize,
               fontWeight: FontWeight.bold,
               color: Color(0xFF1A1C1E),
             ),
@@ -197,14 +233,14 @@ class ImageSaver {
           textDirection: TextDirection.ltr,
         );
         codePainter.layout();
-        codePainter.paint(canvas, Offset(x + 115, y + 15));
+        codePainter.paint(canvas, Offset(textStartX, y + (itemHeight * 0.15)));
 
         // Draw color count
         final countPainter = TextPainter(
           text: TextSpan(
             text: '× ${entry.value}',
-            style: const TextStyle(
-              fontSize: 38,
+            style: TextStyle(
+              fontSize: colorCountFontSize,
               fontWeight: FontWeight.bold,
               color: Color(0xFFFF4081),
             ),
@@ -212,26 +248,25 @@ class ImageSaver {
           textDirection: TextDirection.ltr,
         );
         countPainter.layout();
-        countPainter.paint(canvas, Offset(x + 115, y + 52));
+        countPainter.paint(canvas, Offset(textStartX, y + (itemHeight * 0.50)));
       }
 
       final picture = recorder.endRecording();
+
       final uiImage = await picture.toImage(
         totalWidth.toInt(),
         totalHeight.toInt(),
       );
+
       final byteData = await uiImage.toByteData(format: ui.ImageByteFormat.png);
 
       if (byteData == null) return false;
 
-      // Convert PNG to JPG using image package
+      // Convert PNG to JPG using image package in background thread
       final pngBytes = byteData.buffer.asUint8List();
-      final decodedImage = img.decodePng(pngBytes);
 
-      if (decodedImage == null) return false;
-
-      // Encode as JPG with high quality
-      final jpgBytes = img.encodeJpg(decodedImage, quality: 100);
+      // Use compute to run conversion in isolate
+      final jpgBytes = await compute(_convertPngToJpg, pngBytes);
 
       final tempDir = await getTemporaryDirectory();
       final file = File(
