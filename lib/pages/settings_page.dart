@@ -6,7 +6,7 @@ import 'package:beadneko/utils/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -290,18 +290,15 @@ class _SettingsPageState extends State<SettingsPage> {
     final version = await _getVersionForFeedback();
     final systemInfo = _getSystemInfo();
     final body = _buildFeedbackBody(strings, version, systemInfo);
-    final uri = Uri(
-      scheme: 'mailto',
-      path: _feedbackEmail,
-      queryParameters: {
-        'subject': strings.settingsFeedbackSubject,
-        'body': body,
-      },
-    );
+    final subject = Uri.encodeComponent(strings.settingsFeedbackSubject);
+    final normalizedBody = body.replaceAll('\n', '\r\n');
+    final encodedBody = Uri.encodeComponent(normalizedBody);
+    final mailtoUrl =
+        'mailto:$_feedbackEmail?subject=$subject&body=$encodedBody';
 
     try {
-      final launched = await launchUrl(
-        uri,
+      final launched = await launchUrlString(
+        mailtoUrl,
         mode: LaunchMode.externalApplication,
       );
       if (!launched && mounted) {
