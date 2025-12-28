@@ -62,7 +62,7 @@ class ProjectLocalizationsZH implements S {
   String get dialogBtnConfirm => '确认';
 
   @override
-  String get homeTitle => '把你的回忆';
+  String get homeTitle => '把你的照片';
 
   @override
   String get homeSubtitle1 => '变成 ';

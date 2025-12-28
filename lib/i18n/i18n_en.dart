@@ -63,7 +63,7 @@ class ProjectLocalizationsEN implements S {
   String get dialogBtnConfirm => 'Confirm';
 
   @override
-  String get homeTitle => 'Turn your memories';
+  String get homeTitle => 'Turn your images';
 
   @override
   String get homeSubtitle1 => 'into ';
