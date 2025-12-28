@@ -68,18 +68,6 @@ class ProjectLocalizationsZH implements S {
   String get homeActionCameraSub => '捕捉精彩瞬间';
 
   @override
-  String get homeRecentProjects => '最近项目';
-
-  @override
-  String get homeEmptyState => "还没有创建任何项目，快来制作你的第一个拼豆作品吧!";
-
-  @override
-  String get homeStartNew => '开始新的创作';
-
-  @override
-  String get homeViewAll => '查看全部';
-
-  @override
   String get editorTitle => '生成拼豆图纸';
 
   @override
@@ -117,15 +105,6 @@ class ProjectLocalizationsZH implements S {
 
   @override
   String get editorExporting => '正在导出...';
-
-  @override
-  String get deleteTitle => '删除项目';
-
-  @override
-  String get deleteContent => '确定要删除这个项目吗？';
-
-  @override
-  String get deleteBtn => '删除';
 
   @override
   String get permissionPhotoTitle => '需要照片访问权限';

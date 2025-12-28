@@ -68,19 +68,6 @@ class ProjectLocalizationsEN implements S {
   String get homeActionCameraSub => 'Capture a new moment';
 
   @override
-  String get homeRecentProjects => 'Recent Projects';
-
-  @override
-  String get homeEmptyState =>
-      "No projects yet, start making your first bead work!";
-
-  @override
-  String get homeStartNew => 'Start New Creation';
-
-  @override
-  String get homeViewAll => 'View All';
-
-  @override
   String get editorTitle => 'Generate Bead Pattern';
 
   @override
@@ -118,15 +105,6 @@ class ProjectLocalizationsEN implements S {
 
   @override
   String get editorExporting => 'Exporting...';
-
-  @override
-  String get deleteTitle => 'Delete Project';
-
-  @override
-  String get deleteContent => 'Are you sure you want to delete this project?';
-
-  @override
-  String get deleteBtn => 'Delete';
 
   @override
   String get permissionPhotoTitle => 'Photo Access Required';

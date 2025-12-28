@@ -68,18 +68,6 @@ class ProjectLocalizationsJA implements S {
   String get homeActionCameraSub => '新しい瞬間をキャプチャする';
 
   @override
-  String get homeRecentProjects => '最近のプロジェクト';
-
-  @override
-  String get homeEmptyState => "プロジェクトがまだありません。最初のビーズ作品を作ってみましょう！";
-
-  @override
-  String get homeStartNew => '新しく作る';
-
-  @override
-  String get homeViewAll => 'すべて表示';
-
-  @override
   String get editorTitle => 'ビーズ図案生成';
 
   @override
@@ -117,15 +105,6 @@ class ProjectLocalizationsJA implements S {
 
   @override
   String get editorExporting => 'エクスポート中...';
-
-  @override
-  String get deleteTitle => 'プロジェクトを削除';
-
-  @override
-  String get deleteContent => 'このプロジェクトを削除してもよろしいですか？';
-
-  @override
-  String get deleteBtn => '削除';
 
   @override
   String get permissionPhotoTitle => '写真へのアクセスが必要です';

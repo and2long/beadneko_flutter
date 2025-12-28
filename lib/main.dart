@@ -1,6 +1,5 @@
 import 'package:beadneko/core/network/http.dart';
 import 'package:beadneko/i18n/i18n.dart';
-import 'package:beadneko/models/bead_project.dart';
 import 'package:beadneko/pages/home.dart';
 import 'package:beadneko/store.dart';
 import 'package:beadneko/theme.dart';
@@ -11,18 +10,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_ytlog/flutter_ytlog.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SPUtil.init().then((value) async {
-    await Hive.initFlutter();
-    Hive.registerAdapter(BeadProjectAdapter());
-    await Hive.openBox<BeadProject>('projects');
-    XHttp.init();
-    runApp(Store.init(const MyApp()));
-  });
+  await SPUtil.init();
+  XHttp.init();
+  runApp(Store.init(const MyApp()));
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
   );

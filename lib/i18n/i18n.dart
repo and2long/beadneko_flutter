@@ -90,10 +90,6 @@ abstract class S {
   String get homeActionAlbumSub;
   String get homeActionCamera;
   String get homeActionCameraSub;
-  String get homeRecentProjects;
-  String get homeEmptyState;
-  String get homeStartNew;
-  String get homeViewAll;
 
   // EditorPage
   String get editorTitle;
@@ -111,9 +107,6 @@ abstract class S {
   String get editorExporting;
 
   // Dialogs & Permissions
-  String get deleteTitle;
-  String get deleteContent;
-  String get deleteBtn;
   String get permissionPhotoTitle;
   String get permissionPhotoContent;
   String get permissionAllow;
