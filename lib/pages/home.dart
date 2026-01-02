@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryGradientStart.withOpacity(0.1),
+                    color: AppColors.primaryGradientStart.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -156,7 +156,8 @@ class HomePage extends StatelessWidget {
               iconColor: const Color(0xFF00C9B1),
               textColor: textColor,
               gradient: LinearGradient(colors: [cardColor, cardColor]),
-              iconBackgroundColor: const Color(0xFF00C9B1).withOpacity(0.08),
+              iconBackgroundColor:
+                  const Color(0xFF00C9B1).withValues(alpha: 0.08),
               onTap: () {
                 _checkCameraPermissionAndPickImage(context);
               },
