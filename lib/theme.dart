@@ -63,38 +63,43 @@ class AppGradients {
 
 class AppTheme {
   AppTheme._();
-  static ThemeData light = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      brightness: Brightness.light,
-      seedColor: themeColor,
-    ),
-    fontFamily: GoogleFonts.fredoka().fontFamily,
-    appBarTheme: const AppBarTheme(centerTitle: true, elevation: 1),
-    dividerTheme: DividerThemeData(color: Colors.grey[200], thickness: 1),
-  );
+  static ThemeData lightTheme() {
+    return _buildTheme(Brightness.light);
+  }
 
-  static ThemeData dark = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      brightness: Brightness.dark,
+  static ThemeData darkTheme() {
+    return _buildTheme(Brightness.dark);
+  }
+
+  static ThemeData _buildTheme(Brightness brightness) {
+    final colorScheme = ColorScheme.fromSeed(
       seedColor: themeColor,
-    ),
-    fontFamily: GoogleFonts.fredoka().fontFamily,
-    scaffoldBackgroundColor: AppColors.bgDark,
-    appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      elevation: 1,
-      backgroundColor: AppColors.bgDark,
-      foregroundColor: AppColors.textDarkDark,
-    ),
-    dividerTheme: DividerThemeData(color: Colors.grey[800], thickness: 1),
-    cardTheme: const CardThemeData(
-      color: AppColors.cardDark,
-      elevation: 0,
-    ),
-    bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: AppColors.surfaceDark,
-    ),
-  );
+      brightness: brightness,
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+    );
+    return ThemeData(
+      colorScheme: colorScheme,
+      useMaterial3: true,
+      brightness: brightness,
+      fontFamily: GoogleFonts.fredoka().fontFamily,
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        elevation: 1,
+        scrolledUnderElevation: 1,
+        backgroundColor: colorScheme.surface,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        shape: const CircleBorder(),
+      ),
+      dividerTheme: DividerThemeData(
+        space: 0.5,
+        color: brightness == Brightness.dark
+            ? Color(0xff333333)
+            : Color(0xFFE8E8E8),
+      ),
+      cardTheme: CardThemeData(elevation: 0),
+    );
+  }
 }
