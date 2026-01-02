@@ -4,6 +4,7 @@ import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/store.dart';
 import 'package:beadneko/utils/toast_util.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -48,6 +49,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
+                    leading: Icon(
+                      LucideIcons.palette,
+                      color: colorScheme.primary,
+                    ),
                     title: Text(
                       strings.settingsTheme,
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -64,6 +69,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   const Divider(height: 1, indent: 0, endIndent: 0),
                   ListTile(
+                    leading: Icon(
+                      LucideIcons.languages,
+                      color: colorScheme.primary,
+                    ),
                     title: Text(
                       strings.settingsLanguage,
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -83,6 +92,10 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             Card(
               child: ListTile(
+                leading: Icon(
+                  LucideIcons.mail,
+                  color: colorScheme.primary,
+                ),
                 title: Text(
                   strings.settingsFeedbackTitle,
                   style: theme.textTheme.titleMedium?.copyWith(
