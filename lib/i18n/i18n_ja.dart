@@ -128,16 +128,6 @@ class ProjectLocalizationsJA implements S {
   String get editorExporting => 'エクスポート中...';
 
   @override
-  String get permissionPhotoTitle => '写真へのアクセスが必要です';
-
-  @override
-  String get permissionPhotoContent =>
-      'BeadNekoがビーズ図案を作成するための画像を選択するには、写真へのアクセスを許可してください。';
-
-  @override
-  String get permissionAllow => '許可';
-
-  @override
   String get permissionSettingsTitle => '権限が必要です';
 
   @override
@@ -150,19 +140,6 @@ class ProjectLocalizationsJA implements S {
 
   @override
   String get permissionOpenSettings => '設定を開く';
-
-  @override
-  String get permissionSaveTitle => '保存権限が必要です';
-
-  @override
-  String get permissionSaveContent => 'ビーズの図案を写真ライブラリに保存するには、アクセス権限が必要です。';
-
-  @override
-  String get permissionCameraTitle => 'カメラへのアクセスが必要です';
-
-  @override
-  String get permissionCameraContent =>
-      'BeadNekoがビーズ図案を作成するための写真を撮影するには、カメラへのアクセスを許可してください。';
 
   @override
   String get permissionCameraSettingsContent =>

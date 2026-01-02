@@ -313,35 +313,13 @@ class EditorPage extends StatelessWidget {
       return;
     }
 
-    // Rationale
     if (context.mounted) {
-      final bool shouldContinue =
-          await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(S.of(context).permissionSaveTitle),
-              content: Text(S.of(context).permissionSaveContent),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(S.of(context).cancel),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(S.of(context).permissionAllow),
-                ),
-              ],
-            ),
-          ) ??
-          false;
-
-      if (shouldContinue) {
-        final result = await Permission.photos.request();
-        if ((result.isGranted || result.isLimited) && context.mounted) {
-          _saveImage(context);
-        } else if (result.isPermanentlyDenied && context.mounted) {
-          _showSettingsDialog(context);
-        }
+      // Request permission directly; show settings only if permanently denied.
+      final result = await Permission.photos.request();
+      if ((result.isGranted || result.isLimited) && context.mounted) {
+        _saveImage(context);
+      } else if (result.isPermanentlyDenied && context.mounted) {
+        _showSettingsDialog(context);
       }
     }
   }

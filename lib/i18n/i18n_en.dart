@@ -129,16 +129,6 @@ class ProjectLocalizationsEN implements S {
   String get editorExporting => 'Exporting...';
 
   @override
-  String get permissionPhotoTitle => 'Photo Access Required';
-
-  @override
-  String get permissionPhotoContent =>
-      'BeadNeko needs access to your photos to let you select images for creating bead patterns.';
-
-  @override
-  String get permissionAllow => 'Allow';
-
-  @override
   String get permissionSettingsTitle => 'Permission Required';
 
   @override
@@ -151,20 +141,6 @@ class ProjectLocalizationsEN implements S {
 
   @override
   String get permissionOpenSettings => 'Open Settings';
-
-  @override
-  String get permissionSaveTitle => 'Save Permission Required';
-
-  @override
-  String get permissionSaveContent =>
-      'BeadNeko needs access to save your bead patterns to the photo library.';
-
-  @override
-  String get permissionCameraTitle => 'Camera Access Required';
-
-  @override
-  String get permissionCameraContent =>
-      'BeadNeko needs access to your camera to let you take photos for creating bead patterns.';
 
   @override
   String get permissionCameraSettingsContent =>

@@ -128,15 +128,6 @@ class ProjectLocalizationsZH implements S {
   String get editorExporting => '正在导出...';
 
   @override
-  String get permissionPhotoTitle => '需要照片访问权限';
-
-  @override
-  String get permissionPhotoContent => 'BeadNeko 需要访问您的照片，以便您选择图片制作拼豆图案。';
-
-  @override
-  String get permissionAllow => '允许';
-
-  @override
   String get permissionSettingsTitle => '需要权限';
 
   @override
@@ -149,18 +140,6 @@ class ProjectLocalizationsZH implements S {
 
   @override
   String get permissionOpenSettings => '打开设置';
-
-  @override
-  String get permissionSaveTitle => '需要保存权限';
-
-  @override
-  String get permissionSaveContent => 'BeadNeko 需要访问权限才能将您的拼豆图案保存到照片库。';
-
-  @override
-  String get permissionCameraTitle => '需要相机访问权限';
-
-  @override
-  String get permissionCameraContent => 'BeadNeko 需要访问您的相机，以便您拍照制作拼豆图案。';
 
   @override
   String get permissionCameraSettingsContent =>

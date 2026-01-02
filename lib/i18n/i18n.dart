@@ -114,17 +114,10 @@ abstract class S {
   String get editorExporting;
 
   // Dialogs & Permissions
-  String get permissionPhotoTitle;
-  String get permissionPhotoContent;
-  String get permissionAllow;
   String get permissionSettingsTitle;
   String get permissionPhotoSettingsContent;
   String get permissionSaveSettingsContent;
   String get permissionOpenSettings;
-  String get permissionSaveTitle;
-  String get permissionSaveContent;
-  String get permissionCameraTitle;
-  String get permissionCameraContent;
   String get permissionCameraSettingsContent;
 
   // App name for export

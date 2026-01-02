@@ -186,36 +186,13 @@ class HomePage extends StatelessWidget {
       return;
     }
 
-    // If denied (but not permanently), show custom rationale
     if (context.mounted) {
-      final bool shouldContinue =
-          await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(S.of(context).permissionPhotoTitle),
-              content: Text(S.of(context).permissionPhotoContent),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(S.of(context).cancel),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(S.of(context).permissionAllow),
-                ),
-              ],
-            ),
-          ) ??
-          false;
-
-      if (shouldContinue) {
-        // Request permission
-        final result = await Permission.photos.request();
-        if ((result.isGranted || result.isLimited) && context.mounted) {
-          _pickImage(context);
-        } else if (result.isPermanentlyDenied && context.mounted) {
-          _showSettingsDialog(context);
-        }
+      // Request permission directly; show settings only if permanently denied.
+      final result = await Permission.photos.request();
+      if ((result.isGranted || result.isLimited) && context.mounted) {
+        _pickImage(context);
+      } else if (result.isPermanentlyDenied && context.mounted) {
+        _showSettingsDialog(context);
       }
     }
   }
@@ -261,36 +238,13 @@ class HomePage extends StatelessWidget {
       return;
     }
 
-    // Show custom permission rationale dialog first
     if (context.mounted) {
-      final bool shouldContinue =
-          await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(S.of(context).permissionCameraTitle),
-              content: Text(S.of(context).permissionCameraContent),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(S.of(context).cancel),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(S.of(context).permissionAllow),
-                ),
-              ],
-            ),
-          ) ??
-          false;
-
-      if (shouldContinue) {
-        // Request system permission after user confirmed
-        final result = await Permission.camera.request();
-        if (result.isGranted && context.mounted) {
-          _pickImage(context, source: ImageSource.camera);
-        } else if (result.isPermanentlyDenied && context.mounted) {
-          _showCameraSettingsDialog(context);
-        }
+      // Request system permission directly; show settings only if permanently denied.
+      final result = await Permission.camera.request();
+      if (result.isGranted && context.mounted) {
+        _pickImage(context, source: ImageSource.camera);
+      } else if (result.isPermanentlyDenied && context.mounted) {
+        _showCameraSettingsDialog(context);
       }
     }
   }
