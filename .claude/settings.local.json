@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__serena"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "serena"
+  ]
+}
+
