@@ -17,5 +17,24 @@ class ConstantsHttp {
   static const String baseUrl = '';
 }
 
+class ConstantsVolc {
+  ConstantsVolc._();
+
+  static const String accessKey =
+      String.fromEnvironment('VOLC_ACCESS_KEY', defaultValue: '');
+  static const String secretKey =
+      String.fromEnvironment('VOLC_SECRET_KEY', defaultValue: '');
+  static const String region =
+      String.fromEnvironment('VOLC_REGION', defaultValue: 'cn-north-1');
+  static const String service =
+      String.fromEnvironment('VOLC_SERVICE', defaultValue: 'visual');
+  static const String endpoint =
+      String.fromEnvironment('VOLC_ENDPOINT', defaultValue: 'https://visual.volcengineapi.com/');
+  static const String action =
+      String.fromEnvironment('VOLC_SEGMENT_ACTION', defaultValue: 'SegmentImage');
+  static const String version =
+      String.fromEnvironment('VOLC_SEGMENT_VERSION', defaultValue: '2020-08-26');
+}
+
 const appBarHeight = kToolbarHeight;
 const tileHeight = 55.0;

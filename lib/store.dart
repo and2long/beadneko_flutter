@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:beadneko/core/palette.dart';
 import 'package:beadneko/core/pixel_processor.dart';
+import 'package:beadneko/core/volc_image_segmentation.dart';
 import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/utils/image_saver.dart';
 import 'package:beadneko/utils/sp_util.dart';
@@ -62,15 +63,21 @@ class ConfigStore with ChangeNotifier {
 /// 拼豆项目状态管理
 class BeadProjectProvider with ChangeNotifier {
   Uint8List? _originalImage;
+  Uint8List? _backgroundRemovedImage;
   List<List<ProcessedPixel>>? _grid;
   int _targetSize = 60; // Default 60x60
   bool _isProcessing = false;
+  bool _isRemovingBackground = false;
+  String? _backgroundRemovalError;
 
   Uint8List? get originalImage => _originalImage;
+  Uint8List? get backgroundRemovedImage => _backgroundRemovedImage;
   List<List<ProcessedPixel>>? get grid => _grid;
   int get targetSize => _targetSize;
 
   bool get isProcessing => _isProcessing;
+  bool get isRemovingBackground => _isRemovingBackground;
+  String? get backgroundRemovalError => _backgroundRemovalError;
 
   Map<BeadColor, int> get colorStats {
     if (_grid == null) return {};
@@ -91,7 +98,10 @@ class BeadProjectProvider with ChangeNotifier {
     final XFile? image = await _picker.pickImage(source: source);
     if (image != null) {
       _originalImage = await image.readAsBytes();
-      await processImage();
+      _backgroundRemovedImage = null;
+      _backgroundRemovalError = null;
+      _grid = null;
+      notifyListeners();
     }
   }
 
@@ -103,14 +113,15 @@ class BeadProjectProvider with ChangeNotifier {
   }
 
   Future<void> processImage() async {
-    if (_originalImage == null) return;
+    final sourceImage = _backgroundRemovedImage ?? _originalImage;
+    if (sourceImage == null) return;
 
     _isProcessing = true;
     notifyListeners();
 
     try {
       _grid = await PixelProcessor.processImage(
-        _originalImage!,
+        sourceImage,
         _targetSize,
         Palette.allColors,
       );
@@ -124,8 +135,30 @@ class BeadProjectProvider with ChangeNotifier {
 
   void clearProject() {
     _originalImage = null;
+    _backgroundRemovedImage = null;
+    _backgroundRemovalError = null;
     _grid = null;
     notifyListeners();
+  }
+
+  Future<void> removeBackground() async {
+    if (_originalImage == null || _isRemovingBackground) return;
+    if (_backgroundRemovedImage != null) return;
+
+    _isRemovingBackground = true;
+    _backgroundRemovalError = null;
+    notifyListeners();
+
+    try {
+      final remover = VolcImageSegmentationService();
+      _backgroundRemovedImage = await remover.removeBackground(_originalImage!);
+    } catch (e) {
+      debugPrint("Background removal error: $e");
+      _backgroundRemovalError = e.toString();
+    } finally {
+      _isRemovingBackground = false;
+      notifyListeners();
+    }
   }
 
   Future<bool> saveImage(BuildContext context) async {

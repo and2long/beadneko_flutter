@@ -128,6 +128,24 @@ class ProjectLocalizationsZH implements S {
   String get editorExporting => '正在导出...';
 
   @override
+  String get backgroundRemoveTitle => '抠图预览';
+
+  @override
+  String get backgroundRemoveProcessing => '正在抠图...';
+
+  @override
+  String get backgroundRemoveFailed => '抠图失败，请重试。';
+
+  @override
+  String get backgroundRemoveConfirm => '确认并继续';
+
+  @override
+  String get backgroundRemoveCancel => '重新选择';
+
+  @override
+  String get backgroundRemoveNoImage => '未选择图片';
+
+  @override
   String get permissionSettingsTitle => '需要权限';
 
   @override
