@@ -1,6 +1,6 @@
 import 'package:beadneko/components/action_card.dart';
 import 'package:beadneko/i18n/i18n.dart';
-import 'package:beadneko/pages/editor_page.dart';
+import 'package:beadneko/pages/background_confirm_page.dart';
 import 'package:beadneko/pages/settings_page.dart';
 import 'package:beadneko/store.dart';
 import 'package:beadneko/theme.dart';
@@ -283,7 +283,7 @@ class HomePage extends StatelessWidget {
     if (store.originalImage != null && context.mounted) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const EditorPage()),
+        MaterialPageRoute(builder: (context) => const BackgroundConfirmPage()),
       );
     }
   }

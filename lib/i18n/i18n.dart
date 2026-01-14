@@ -113,6 +113,14 @@ abstract class S {
   String get editorSaveFailure;
   String get editorExporting;
 
+  // Background removal
+  String get backgroundRemoveTitle;
+  String get backgroundRemoveProcessing;
+  String get backgroundRemoveFailed;
+  String get backgroundRemoveConfirm;
+  String get backgroundRemoveCancel;
+  String get backgroundRemoveNoImage;
+
   // Dialogs & Permissions
   String get permissionSettingsTitle;
   String get permissionPhotoSettingsContent;

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:beadneko/components/grid_view.dart';
 import 'package:beadneko/i18n/i18n.dart';
+import 'package:beadneko/pages/background_confirm_page.dart';
 import 'package:beadneko/store.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,7 +32,16 @@ class EditorPage extends StatelessWidget {
           if (project.grid == null) {
             return Center(
               child: ElevatedButton.icon(
-                onPressed: () => project.pickImage(ImageSource.gallery),
+                onPressed: () async {
+                  await project.pickImage(ImageSource.gallery);
+                  if (context.mounted && project.originalImage != null) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const BackgroundConfirmPage(),
+                      ),
+                    );
+                  }
+                },
                 icon: const Icon(Icons.add_photo_alternate),
                 label: Text(S.of(context).editorSelectImage),
               ),

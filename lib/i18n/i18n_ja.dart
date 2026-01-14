@@ -128,6 +128,24 @@ class ProjectLocalizationsJA implements S {
   String get editorExporting => 'エクスポート中...';
 
   @override
+  String get backgroundRemoveTitle => '背景を削除';
+
+  @override
+  String get backgroundRemoveProcessing => '背景を削除しています...';
+
+  @override
+  String get backgroundRemoveFailed => '背景の削除に失敗しました。';
+
+  @override
+  String get backgroundRemoveConfirm => 'この画像を使用';
+
+  @override
+  String get backgroundRemoveCancel => '別の画像を選択';
+
+  @override
+  String get backgroundRemoveNoImage => '画像が選択されていません。';
+
+  @override
   String get permissionSettingsTitle => '権限が必要です';
 
   @override

@@ -129,6 +129,24 @@ class ProjectLocalizationsEN implements S {
   String get editorExporting => 'Exporting...';
 
   @override
+  String get backgroundRemoveTitle => 'Remove Background';
+
+  @override
+  String get backgroundRemoveProcessing => 'Removing background...';
+
+  @override
+  String get backgroundRemoveFailed => 'Failed to remove background.';
+
+  @override
+  String get backgroundRemoveConfirm => 'Use This Image';
+
+  @override
+  String get backgroundRemoveCancel => 'Choose Another';
+
+  @override
+  String get backgroundRemoveNoImage => 'No image selected.';
+
+  @override
   String get permissionSettingsTitle => 'Permission Required';
 
   @override
