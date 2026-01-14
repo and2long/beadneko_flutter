@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
@@ -168,9 +169,45 @@ class Palette {
   }
 
   static double _colorDistance(Color c1, Color c2) {
-    double r = (c1.r - c2.r);
-    double g = (c1.g - c2.g);
-    double b = (c1.b - c2.b);
-    return r * r + g * g + b * b;
+    final lab1 = _toLab(c1);
+    final lab2 = _toLab(c2);
+    final dL = lab1[0] - lab2[0];
+    final dA = lab1[1] - lab2[1];
+    final dB = lab1[2] - lab2[2];
+    return dL * dL + dA * dA + dB * dB;
+  }
+
+  static List<double> _toLab(Color color) {
+    // sRGB -> linear RGB
+    double r = color.red / 255.0;
+    double g = color.green / 255.0;
+    double b = color.blue / 255.0;
+
+    r = r <= 0.04045 ? r / 12.92 : pow((r + 0.055) / 1.055, 2.4).toDouble();
+    g = g <= 0.04045 ? g / 12.92 : pow((g + 0.055) / 1.055, 2.4).toDouble();
+    b = b <= 0.04045 ? b / 12.92 : pow((b + 0.055) / 1.055, 2.4).toDouble();
+
+    // linear RGB -> XYZ (D65)
+    final x = (r * 0.4124 + g * 0.3576 + b * 0.1805);
+    final y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+    final z = (r * 0.0193 + g * 0.1192 + b * 0.9505);
+
+    // XYZ -> Lab
+    const xn = 0.95047;
+    const yn = 1.00000;
+    const zn = 1.08883;
+
+    double fx = _pivotLab(x / xn);
+    double fy = _pivotLab(y / yn);
+    double fz = _pivotLab(z / zn);
+
+    final l = (116.0 * fy) - 16.0;
+    final a = 500.0 * (fx - fy);
+    final b2 = 200.0 * (fy - fz);
+    return [l, a, b2];
+  }
+
+  static double _pivotLab(double t) {
+    return t > 0.008856 ? pow(t, 1.0 / 3.0).toDouble() : (7.787 * t) + 16 / 116;
   }
 }
