@@ -5,6 +5,7 @@ import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/store.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -337,6 +338,36 @@ class EditorPage extends StatelessWidget {
           ),
         ),
       );
+
+      // 保存成功后，检查是否需要触发评分
+      if (success) {
+        _checkAndRequestReview(context, project);
+      }
+    }
+  }
+
+  Future<void> _checkAndRequestReview(
+    BuildContext context,
+    BeadProjectProvider project,
+  ) async {
+    final shouldRequest = await project.shouldRequestReview();
+    if (context.mounted && shouldRequest) {
+      _requestReview(context);
+    }
+  }
+
+  Future<void> _requestReview(BuildContext context) async {
+    final inAppReview = InAppReview.instance;
+    try {
+      final available = await inAppReview.isAvailable();
+      if (available) {
+        await inAppReview.requestReview();
+      } else {
+        debugPrint("In-app review is not available on this device");
+      }
+    } catch (e) {
+      // iOS 模拟器会抛出异常，静默处理
+      debugPrint("In-app review failed: $e");
     }
   }
 

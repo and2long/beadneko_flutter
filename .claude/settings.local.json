@@ -6,6 +6,6 @@
   },
   "enabledMcpjsonServers": [
     "serena"
-  ]
+  ],
+  "enableAllProjectMcpServers": true
 }
-

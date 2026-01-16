@@ -141,6 +141,11 @@ class BeadProjectProvider with ChangeNotifier {
         locale.languageCode,
         s.appName,
       );
+
+      if (success) {
+        await _incrementExportCount();
+      }
+
       return success;
     } catch (e) {
       debugPrint("Save error: $e");
@@ -149,5 +154,18 @@ class BeadProjectProvider with ChangeNotifier {
       _isProcessing = false;
       notifyListeners();
     }
+  }
+
+  Future<bool> shouldRequestReview() async {
+    final exportCount = SPUtil.getExportCount();
+    if (exportCount >= 2 && !SPUtil.hasPromptedReview()) {
+      await SPUtil.setReviewPrompted(true);
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _incrementExportCount() async {
+    await SPUtil.incrementExportCount();
   }
 }

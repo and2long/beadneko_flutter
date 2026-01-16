@@ -9,6 +9,8 @@ class ConstantsKeyCache {
   static String keyFCMToken = "FCM_TOKEN";
   static String keyIsFirst = "IS_FIRST";
   static String keyUser = "USER";
+  static String keyExportCount = "EXPORT_COUNT";
+  static String keyReviewPrompted = "REVIEW_PROMPTED";
 }
 
 class ConstantsHttp {

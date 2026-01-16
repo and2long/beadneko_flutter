@@ -72,6 +72,29 @@ class SPUtil {
     return _spf.getString(ConstantsKeyCache.keyRefreshToken);
   }
 
+  /// 导出图片次数
+  static Future<bool> setExportCount(int count) {
+    return _spf.setInt(ConstantsKeyCache.keyExportCount, count);
+  }
+
+  static int getExportCount() {
+    return _spf.getInt(ConstantsKeyCache.keyExportCount) ?? 0;
+  }
+
+  static Future<bool> incrementExportCount() {
+    final currentCount = getExportCount();
+    return setExportCount(currentCount + 1);
+  }
+
+  /// 是否已弹出过评分提示
+  static Future<bool> setReviewPrompted(bool prompted) {
+    return _spf.setBool(ConstantsKeyCache.keyReviewPrompted, prompted);
+  }
+
+  static bool hasPromptedReview() {
+    return _spf.getBool(ConstantsKeyCache.keyReviewPrompted) ?? false;
+  }
+
   static void clean() async {
     // 清空所有本地数据，只保存是否是首次进入app的状态
     bool value = isFirst();
