@@ -4,10 +4,14 @@ import 'package:beadneko/i18n/i18n.dart';
 import 'package:beadneko/store.dart';
 import 'package:beadneko/utils/toast_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ytlog/flutter_ytlog.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+const String _tag = 'SettingsPage';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -92,10 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             Card(
               child: ListTile(
-                leading: Icon(
-                  LucideIcons.mail,
-                  color: colorScheme.primary,
-                ),
+                leading: Icon(LucideIcons.mail, color: colorScheme.primary),
                 title: Text(
                   strings.settingsFeedbackTitle,
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -111,6 +112,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 onTap: _sendFeedbackEmail,
               ),
             ),
+            Card(
+              child: ListTile(
+                leading: Icon(LucideIcons.star, color: colorScheme.primary),
+                title: Text(
+                  strings.settingsReview,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                subtitle: Text(
+                  strings.settingsReviewDesc,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                onTap: _requestReview,
+              ),
+            ),
             const SizedBox(height: 24),
             Center(
               child: Text(
@@ -124,6 +143,26 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _requestReview() async {
+    final strings = S.of(context);
+    final inAppReview = InAppReview.instance;
+    try {
+      final available = await inAppReview.isAvailable();
+      if (!available) {
+        if (mounted) {
+          ToastUtil.show(strings.reviewUnavailable);
+        }
+        return;
+      }
+      await inAppReview.requestReview();
+    } catch (e) {
+      Log.e(_tag, 'In-app review failed: $e');
+      if (mounted) {
+        ToastUtil.show(strings.reviewUnavailable);
+      }
+    }
   }
 
   String _themeModeLabel(ThemeMode mode) {

@@ -148,4 +148,13 @@ class ProjectLocalizationsEN implements S {
 
   @override
   String get appName => 'BeadNeko';
+
+  @override
+  String get settingsReview => 'Rate the app';
+
+  @override
+  String get settingsReviewDesc => 'Enjoy this app? Rate us';
+
+  @override
+  String get reviewUnavailable => 'In-app review is not available right now';
 }

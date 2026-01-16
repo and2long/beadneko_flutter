@@ -147,4 +147,13 @@ class ProjectLocalizationsJA implements S {
 
   @override
   String get appName => 'BeadNeko';
+
+  @override
+  String get settingsReview => 'アプリを評価する';
+
+  @override
+  String get settingsReviewDesc => 'このアプリは気に入りましたか？評価してください';
+
+  @override
+  String get reviewUnavailable => 'アプリ内評価は現在利用できません';
 }

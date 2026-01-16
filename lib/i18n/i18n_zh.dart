@@ -147,4 +147,13 @@ class ProjectLocalizationsZH implements S {
 
   @override
   String get appName => '拼豆猫';
+
+  @override
+  String get settingsReview => '应用评分';
+
+  @override
+  String get settingsReviewDesc => '喜欢这个应用吗？给我们评分';
+
+  @override
+  String get reviewUnavailable => '当前无法进行应用内评分';
 }

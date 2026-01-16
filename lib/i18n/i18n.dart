@@ -122,4 +122,8 @@ abstract class S {
 
   // App name for export
   String get appName;
+
+  String get settingsReview;
+  String get settingsReviewDesc;
+  String get reviewUnavailable;
 }
